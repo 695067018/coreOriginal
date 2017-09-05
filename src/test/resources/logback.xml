@@ -9,7 +9,7 @@
         </encoder>
     </appender>
 
-    <appender name="trace" class="com.fow.core.platform.log.TraceAppender">
+    <appender name="trace" class="com.sug.core.platform.log.TraceAppender">
         <layout>
             <pattern>%d [%thread] %-5level %logger{36} - %msg%n</pattern>
         </layout>
