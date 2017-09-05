@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration>
+    <appender name="info" class="ch.qos.logback.core.ConsoleAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>INFO</level>
+        </filter>
+        <encoder>
+            <pattern>%d [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="trace" class="com.fow.core.platform.log.TraceAppender">
+        <layout>
+            <pattern>%d [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </layout>
+
+        <logFolder>E:/java_project/log</logFolder>
+    </appender>
+
+    <root level="debug">
+        <appender-ref ref="info"/>
+        <appender-ref ref="trace"/>
+    </root>
+</configuration>
