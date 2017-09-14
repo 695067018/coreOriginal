@@ -26,9 +26,7 @@ import java.io.*;
 import java.net.URLEncoder;
 import java.util.*;
 
-/**
- * Created by Greg.Chen on 2015/6/2.
- */
+
 @Service
 public class WxPayService {
 

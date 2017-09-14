@@ -109,7 +109,7 @@ public class RESTController{
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     @ResponseBody
     public ErrorResponse loginRequired(LoginRequiredException ex){
-        ErrorResponse response = errorResponseBuilder.createErrorResponse(ex,true);
+        ErrorResponse response = errorResponseBuilder.createValidationResponse(ex);
         response.setErrorCode(APIErrorCode.LOGIN_REQUIRED.getCode());
         return response;
     }

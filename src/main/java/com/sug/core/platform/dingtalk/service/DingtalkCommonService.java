@@ -9,6 +9,8 @@ import com.sug.core.platform.dingtalk.response.DingtalkCreateChatResponse;
 import com.sug.core.platform.dingtalk.response.DingtalkTokenResponse;
 import com.sug.core.platform.dingtalk.response.DingtalkUserIdResponse;
 import com.sug.core.rest.client.SimpleHttpClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -19,6 +21,7 @@ import java.util.*;
 
 @Service
 public class DingtalkCommonService {
+    private static final Logger logger = LoggerFactory.getLogger(DingtalkCommonService.class);
 
     private static final String CREATE_CHAT_URL = "https://oapi.dingtalk.com/chat/create";
 
@@ -63,22 +66,26 @@ public class DingtalkCommonService {
                 + response.getErrcode() + ", errmsg :" + response.getErrmsg());
     }
 
-    public void sendMsg(String chatId,String text) throws Exception {
-        String uri = SEND_CHAT_URL + "?access_token=" + tokenService.getToken();
+    public void sendMsg(String chatId,String text) {
+        try {
+            String uri = SEND_CHAT_URL + "?access_token=" + tokenService.getToken();
 
-        SendMsgText msg = new SendMsgText();
-        msg.setContent(text);
+            SendMsgText msg = new SendMsgText();
+            msg.setContent(text);
 
-        DingtalkSendMsgForm form = new DingtalkSendMsgForm();
-        form.setChatid(chatId);
-        form.setMsgtype("text");
-        form.setText(msg);
+            DingtalkSendMsgForm form = new DingtalkSendMsgForm();
+            form.setChatid(chatId);
+            form.setMsgtype("text");
+            form.setText(msg);
 
-        DingtalkCommonResponse response = SimpleHttpClient.post(uri,DingtalkCommonResponse.class,form);
+            DingtalkCommonResponse response = SimpleHttpClient.post(uri, DingtalkCommonResponse.class, form);
 
-        if(!response.getErrcode().equalsIgnoreCase("0")){
-            throw new RuntimeException("dingtalk send Msg fail, errcode :"
-                    + response.getErrcode() + ", errmsg :" + response.getErrmsg());
+            if (!response.getErrcode().equalsIgnoreCase("0")) {
+                throw new RuntimeException("dingtalk send Msg fail, errcode :"
+                        + response.getErrcode() + ", errmsg :" + response.getErrmsg());
+            }
+        } catch (Exception ex){
+            logger.error("dingtalk send msg fail:" + ex.getMessage());
         }
     }
 }

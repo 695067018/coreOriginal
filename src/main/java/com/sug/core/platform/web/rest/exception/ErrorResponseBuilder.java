@@ -1,6 +1,7 @@
 package com.sug.core.platform.web.rest.exception;
 
 
+import com.sug.core.platform.exception.LoginRequiredException;
 import com.sug.core.platform.log.ActionLog;
 import com.sug.core.platform.log.ActionLogger;
 import com.sug.core.platform.log.ActionResult;
@@ -43,6 +44,17 @@ public class ErrorResponseBuilder {
         }
 
         return error;
+    }
+
+    public ErrorResponse createValidationResponse(LoginRequiredException e) {
+        String errorMessage = ExceptionUtils.stackTrace(e);
+        logger.info(errorMessage);
+
+        ErrorResponse response = new ErrorResponse();
+        response.setErrorCode(StringUtils.hasText(e.getCode())?e.getCode():APIErrorCode.LOGIN_REQUIRED.getCode());
+        response.setMessage(e.getMessage());
+
+        return response;
     }
 
     public ErrorResponse createValidationResponse(InvalidRequestException e) {
