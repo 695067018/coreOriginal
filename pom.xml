@@ -114,12 +114,18 @@
         <dependency>
             <groupId>com.aliyun</groupId>
             <artifactId>aliyun-java-sdk-core</artifactId>
-            <version>2.4.2</version>
+            <version>3.2.8</version>
         </dependency>
         <dependency>
             <groupId>com.aliyun</groupId>
             <artifactId>aliyun-java-sdk-sms</artifactId>
             <version>3.0.0-rc1</version>
+        </dependency>
+    
+        <dependency>
+            <groupId>org.codehaus.janino</groupId>
+            <artifactId>janino</artifactId>
+            <version>3.0.6</version>
         </dependency>
     </dependencies>
 
