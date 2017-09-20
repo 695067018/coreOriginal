@@ -19,33 +19,7 @@ public class WeChatSignService {
     @Autowired
     private WeChatParams params;
 
-    public String unifiedPaySign(WeChatPaySignForm form) {
-        SortedMap<String, String> map = new TreeMap<String, String>();
-        map.put("appid", params.getAppId());
-        map.put("mch_id", params.getMchId());
-        map.put("nonce_str", form.getNonceStr());
-        map.put("body", form.getBody());
-        map.put("out_trade_no", form.getPaymentNum());
-
-        map.put("total_fee", String.valueOf(form.getTotalFee()));
-        map.put("spbill_create_ip", form.getCreateIP());
-        map.put("notify_url", params.getNotifyUrl());
-        map.put("trade_type", form.getTradeType());
-
-        if(form.getTradeType().equalsIgnoreCase(WeChatPayConstants.TRADETYPE_JS)){
-            if(StringUtils.isEmpty(form.getOpenId())){
-                throw new ResourceNotFoundException("require open id");
-            }
-            map.put("openid", form.getOpenId());
-        }
-
-        if(form.getTradeType().equalsIgnoreCase(WeChatPayConstants.TRADETYPE_NATIVE)){
-            if(StringUtils.isEmpty(form.getOpenId())){
-                throw new ResourceNotFoundException("require product id");
-            }
-            map.put("product_id", form.getProductId());
-        }
-
+    public String unifiedPaySign(SortedMap<String, String> map) {
         return signature(map);
     }
 

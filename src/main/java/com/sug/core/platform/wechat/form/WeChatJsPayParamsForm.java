@@ -3,18 +3,18 @@ package com.sug.core.platform.wechat.form;
 import com.sug.core.platform.wechat.constants.WeChatPayConstants;
 
 public class WeChatJsPayParamsForm {
-    private Double fee;
+    private int total_fee;
     private String body;
-    private String paymentNum;
-    private String openId;
-    private String clientIP;
+    private String out_trade_no;
+    private String openid;
+    private String spbill_create_ip;
 
-    public Double getFee() {
-        return fee;
+    public int getTotal_fee() {
+        return total_fee;
     }
 
-    public void setFee(Double fee) {
-        this.fee = fee;
+    public void setTotal_fee(int total_fee) {
+        this.total_fee = total_fee;
     }
 
     public String getBody() {
@@ -25,27 +25,27 @@ public class WeChatJsPayParamsForm {
         this.body = body;
     }
 
-    public String getPaymentNum() {
-        return paymentNum;
+    public String getOut_trade_no() {
+        return out_trade_no;
     }
 
-    public void setPaymentNum(String paymentNum) {
-        this.paymentNum = paymentNum;
+    public void setOut_trade_no(String out_trade_no) {
+        this.out_trade_no = out_trade_no;
     }
 
-    public String getOpenId() {
-        return openId;
+    public String getOpenid() {
+        return openid;
     }
 
-    public void setOpenId(String openId) {
-        this.openId = openId;
+    public void setOpenid(String openid) {
+        this.openid = openid;
     }
 
-    public String getClientIP() {
-        return clientIP;
+    public String getSpbill_create_ip() {
+        return spbill_create_ip;
     }
 
-    public void setClientIP(String clientIP) {
-        this.clientIP = clientIP;
+    public void setSpbill_create_ip(String spbill_create_ip) {
+        this.spbill_create_ip = spbill_create_ip;
     }
 }

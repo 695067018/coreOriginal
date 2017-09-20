@@ -8,7 +8,11 @@ import com.sug.core.platform.wechat.form.WeChatJsPayParamsForm;
 import com.sug.core.platform.wechat.form.WeChatNativeParamsForm;
 import com.sug.core.platform.wechat.form.WeChatPaySignForm;
 import com.sug.core.platform.wechat.form.WeChatUnifiedOrderForm;
+import com.sug.core.platform.wechat.request.WeChatPayNotifyForm;
 import com.sug.core.platform.wechat.response.WeChatJsPayResponse;
+import com.sug.core.platform.wechat.response.WeChatUnifiedOrderResponse;
+import com.sug.core.platform.wx.model.WxPrepayRequest;
+import com.sug.core.platform.wx.model.WxPrepayResponse;
 import com.sug.core.platform.wx.service.MD5Util;
 import com.sug.core.util.RandomStringGenerator;
 import org.apache.http.HttpResponse;
@@ -28,9 +32,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
+import java.io.*;
 import java.util.*;
 
 @Service
@@ -52,11 +57,10 @@ public class WeChatPayService {
 
         WeChatUnifiedOrderForm unifiedOrderForm = new WeChatUnifiedOrderForm();
         BeanUtils.copyProperties(form,unifiedOrderForm);
-        unifiedOrderForm.setCreateIP(form.getClientIP());
-        unifiedOrderForm.setTradeType(WeChatPayConstants.TRADETYPE_JS);
+        unifiedOrderForm.setTrade_type(WeChatPayConstants.TRADETYPE_JS);
 
         //generate unified order
-        String packageBody = "prepay_id=" + this.generateUnifiedorder(unifiedOrderForm);
+        String packageBody = "prepay_id=" + this.generateUnifiedorder(unifiedOrderForm).getPrepay_id();
 
         WeChatPaySignForm signForm = new WeChatPaySignForm();
         signForm.setTimeStamp(timestamp.toString());
@@ -74,117 +78,46 @@ public class WeChatPayService {
     public String getQrCodeUrl(WeChatNativeParamsForm form) throws Exception {
         WeChatUnifiedOrderForm unifiedOrderForm = new WeChatUnifiedOrderForm();
         BeanUtils.copyProperties(form,unifiedOrderForm);
-        unifiedOrderForm.setCreateIP(form.getApiIP());
-        unifiedOrderForm.setTradeType(WeChatPayConstants.TRADETYPE_JS);
+        unifiedOrderForm.setTrade_type(WeChatPayConstants.TRADETYPE_JS);
 
         //generate unified order
-        return this.generateUnifiedorder(unifiedOrderForm);
+        return this.generateUnifiedorder(unifiedOrderForm).getCode_url();
     }
 
-    private String generateUnifiedorder(WeChatUnifiedOrderForm form) throws Exception {
+    private WeChatUnifiedOrderResponse generateUnifiedorder(WeChatUnifiedOrderForm form) throws Exception {
         String nonce_str = RandomStringGenerator.getRandomStringByLength(15);
-        int total_fee = (int) (form.getFee() * 100);
+        form.setNonce_str(nonce_str);
+        form.setAppid(params.getAppId());
+        form.setMch_id(params.getMchId());
+        form.setNotify_url(params.getNotifyUrl());
 
-        StringBuilder xml = new StringBuilder();
-        xml.append("<xml>");
-        xml.append(String.format("<appid>%s</appid>",params.getAppId()));
-        xml.append(String.format("<mch_id>%s</mch_id>",params.getMchId()));
-        xml.append(String.format("<nonce_str>%s</nonce_str>",nonce_str));
-        xml.append(String.format("<body><![CDATA[%s]]></nonce_str>",form.getBody()));
-        xml.append(String.format("<out_trade_no>%s</out_trade_no>",form.getPaymentNum()));
-        xml.append(String.format("<total_fee>%s</total_fee>",total_fee));
-        xml.append(String.format("<spbill_create_ip>%s</spbill_create_ip>",form.getCreateIP()));
-        xml.append(String.format("<notify_url>%s</notify_url>",params.getNotifyUrl()));
-        xml.append(String.format("<trade_type>%s</trade_type>",form.getTradeType()));
+        String sign = signService.unifiedPaySign(form.toMap());
 
-        if(form.getTradeType().equalsIgnoreCase(WeChatPayConstants.TRADETYPE_JS)){
-            if(StringUtils.isEmpty(form.getOpenId())){
-                throw new ResourceNotFoundException("require open id");
-            }
-            xml.append(String.format("<openid>%s</openid>",form.getOpenId()));
-        }
+        form.setSign(sign);
 
-        if(form.getTradeType().equalsIgnoreCase(WeChatPayConstants.TRADETYPE_NATIVE)){
-            if(StringUtils.isEmpty(form.getOpenId())){
-                throw new ResourceNotFoundException("require product id");
-            }
-            xml.append(String.format("<product_id>%s</product_id>",form.getProductId()));
-        }
-
-        WeChatPaySignForm signForm = new WeChatPaySignForm();
-        BeanUtils.copyProperties(form,signForm);
-        signForm.setNonceStr(nonce_str);
-        signForm.setTotalFee(total_fee);
-
-        String sign = signService.unifiedPaySign(signForm);
-        xml.append(String.format("<sign>%s</sign>",sign));
+        JAXBContext jaxbContext = JAXBContext.newInstance(WxPrepayRequest.class);
+        Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+        StringWriter sw = new StringWriter();
+        jaxbMarshaller.marshal(form, sw);
+        String xml = sw.toString();
 
         HttpClient client = new DefaultHttpClient();
         HttpPost httpPost = new HttpPost(UNIFIEDORDER_URL);
-        httpPost.setEntity(new StringEntity(xml.toString(), "UTF-8"));
+        httpPost.setEntity(new StringEntity(xml, "UTF-8"));
         HttpResponse response = client.execute(httpPost);
 
         byte[] content = EntityUtils.toByteArray(response.getEntity());
         String responseText = new String(content, "UTF-8");
 
-        Map map = doXMLParse(responseText);
-        if("FAIL".equalsIgnoreCase(map.get("return_code").toString())){
-            throw new RuntimeException("get UnifiedOrder fail,msg:" + map.get("return_msg").toString());
+        JAXBContext resJaxbContext = JAXBContext.newInstance(WeChatUnifiedOrderResponse.class);
+        Unmarshaller unmarshaller = resJaxbContext.createUnmarshaller();
+
+        StringReader reader = new StringReader(responseText);
+        WeChatUnifiedOrderResponse unifiedOrderResponse = (WeChatUnifiedOrderResponse) unmarshaller.unmarshal(reader);
+
+        if("FAIL".equalsIgnoreCase(unifiedOrderResponse.getReturn_code())){
+            throw new RuntimeException("get UnifiedOrder fail,msg:" + unifiedOrderResponse.getReturn_msg());
         }
-        return map.get("prepay_id").toString();
+        return unifiedOrderResponse;
     }
-
-    private Map<String, String> doXMLParse(String strxml) throws Exception {
-        if(null == strxml || "".equals(strxml)) {
-            return null;
-        }
-
-        Map m = new HashMap();
-        InputStream in = new ByteArrayInputStream(strxml.getBytes());;
-        SAXBuilder builder = new SAXBuilder();
-        Document doc = builder.build(in);
-        Element root = doc.getRootElement();
-        List list = root.getChildren();
-        Iterator it = list.iterator();
-        while(it.hasNext()) {
-            Element e = (Element) it.next();
-            String k = e.getName();
-            String v = "";
-            List children = e.getChildren();
-            if(children.isEmpty()) {
-                v = e.getTextNormalize();
-            } else {
-                v = getChildrenText(children);
-            }
-
-            m.put(k, v);
-        }
-
-        in.close();
-
-        return m;
-    }
-
-    private static String getChildrenText(List children) {
-        StringBuffer sb = new StringBuffer();
-        if(!children.isEmpty()) {
-            Iterator it = children.iterator();
-            while(it.hasNext()) {
-                Element e = (Element) it.next();
-                String name = e.getName();
-                String value = e.getTextNormalize();
-                List list = e.getChildren();
-                sb.append("<" + name + ">");
-                if(!list.isEmpty()) {
-                    sb.append(getChildrenText(list));
-                }
-                sb.append(value);
-                sb.append("</" + name + ">");
-            }
-        }
-
-        return sb.toString();
-    }
-
-
 }
