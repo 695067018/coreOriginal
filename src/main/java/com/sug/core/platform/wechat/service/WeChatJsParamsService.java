@@ -44,7 +44,7 @@ public class WeChatJsParamsService {
             if (StringUtils.isEmpty(ticket.getJsTicket())
                     || ticket.getGenerateTime().getTime() + EXPIRES_IN < System.currentTimeMillis()) {
                 WeChatJsTicketResponse response = SimpleHttpClient.get(uri, WeChatJsTicketResponse.class);
-                if (!Objects.isNull(response.getErrcode())) {
+                if (Objects.nonNull(response.getErrcode()) &&  !"0".equals(response.getErrcode())) {
                     logger.error("weChat jsTicket fail,errCode:" + response.getErrcode() + ",errMsg:" + response.getErrmsg());
                 }
                 ticket.setJsTicket(response.getTicket());

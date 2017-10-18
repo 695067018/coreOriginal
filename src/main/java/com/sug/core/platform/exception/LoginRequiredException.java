@@ -1,8 +1,12 @@
 package com.sug.core.platform.exception;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
 /**
  * Created by Administrator on 14-10-28.
  */
+@ResponseStatus(value= HttpStatus.UNAUTHORIZED)
 public class LoginRequiredException extends RuntimeException {
     private String code;
 

@@ -69,6 +69,7 @@ public class WeChatPayService {
 
         WeChatJsPayResponse response = new WeChatJsPayResponse();
         BeanUtils.copyProperties(signForm,response);
+        response.setTimestamp(timestamp);
         response.setSignType(WeChatPayConstants.SIGNTYPE_JSPAY);
         response.setPaySign(signService.jsPaySign(signForm));
 
@@ -95,7 +96,7 @@ public class WeChatPayService {
 
         form.setSign(sign);
 
-        JAXBContext jaxbContext = JAXBContext.newInstance(WxPrepayRequest.class);
+        JAXBContext jaxbContext = JAXBContext.newInstance(WeChatUnifiedOrderForm.class);
         Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
         StringWriter sw = new StringWriter();
         jaxbMarshaller.marshal(form, sw);
