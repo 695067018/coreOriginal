@@ -9,8 +9,8 @@
 
 
     <properties>
-        <mybatis-version>3.2.5</mybatis-version>
-        <mybatis-spring-version>1.2.2</mybatis-spring-version>
+        <mybatis-version>3.3.0</mybatis-version>
+        <mybatis-spring-version>1.2.3</mybatis-spring-version>
         <mybatis-ehcache-version>1.0.0</mybatis-ehcache-version>
         <!--<ehcache-version>2.6.8</ehcache-version>-->
         <apach-httpcomponents>4.2.3</apach-httpcomponents>
