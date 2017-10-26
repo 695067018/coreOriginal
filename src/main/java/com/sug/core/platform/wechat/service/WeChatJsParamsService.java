@@ -41,7 +41,7 @@ public class WeChatJsParamsService {
         String uri = String.format(GET_TOKEN_URL, tokenService.getToken());
 
         synchronized (this) {
-            if (StringUtils.isEmpty(ticket.getJsTicket())
+            if (!StringUtils.hasText(ticket.getJsTicket())
                     || ticket.getGenerateTime().getTime() + EXPIRES_IN < System.currentTimeMillis()) {
                 WeChatJsTicketResponse response = SimpleHttpClient.get(uri, WeChatJsTicketResponse.class);
                 if (Objects.nonNull(response.getErrcode()) &&  !"0".equals(response.getErrcode())) {

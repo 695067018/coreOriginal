@@ -1,6 +1,7 @@
 package com.sug.core.platform.sms.ali.message;
 
-import org.apache.commons.lang3.StringUtils;
+
+import org.springframework.util.StringUtils;
 
 /**
  * Created by Greg.chen on 2016-03-14.
@@ -13,7 +14,7 @@ public class CaptchaMessage {
 
     public String getCode() {
 
-        if(StringUtils.isEmpty(code)){
+        if(!StringUtils.hasText(code)){
             String captcha = "";
             for (int i = 0; i < 4; i++) {
                 captcha += (int) (Math.random() * 10);

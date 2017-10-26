@@ -34,7 +34,7 @@ public class DingtalkTokenService {
         String uri = GET_TOKEN_URL + "?corpid=" + corpId + "&corpsecret=" + corpSecret;
 
         synchronized (this) {
-            if (StringUtils.isEmpty(tokenCopy.getToken())
+            if (!StringUtils.hasText(tokenCopy.getToken())
                     || tokenCopy.getGenerateTime().getTime() + EXPIRES_IN < System.currentTimeMillis()) {
                 DingtalkTokenResponse response = SimpleHttpClient.get(uri, DingtalkTokenResponse.class);
                 if(response.getErrcode().equalsIgnoreCase("0") ){

@@ -34,7 +34,7 @@ public class WeChatTokenService {
         String uri = String.format(GET_TOKEN_URL,params.getAppId(),params.getAppSecret());
 
         synchronized (this) {
-            if (StringUtils.isEmpty(token.getAccessToken())
+            if (!StringUtils.hasText(token.getAccessToken())
                     || token.getGenerateTime().getTime() + EXPIRES_IN < System.currentTimeMillis()) {
                 WeChatTokenResponse response = SimpleHttpClient.get(uri, WeChatTokenResponse.class);
                 if(!Objects.isNull(response.getErrcode())){
