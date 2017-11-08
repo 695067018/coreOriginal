@@ -79,7 +79,7 @@ public class WeChatPayService {
     public String getQrCodeUrl(WeChatNativeParamsForm form) throws Exception {
         WeChatUnifiedOrderForm unifiedOrderForm = new WeChatUnifiedOrderForm();
         BeanUtils.copyProperties(form,unifiedOrderForm);
-        unifiedOrderForm.setTrade_type(WeChatPayConstants.TRADETYPE_JS);
+        unifiedOrderForm.setTrade_type(WeChatPayConstants.TRADETYPE_NATIVE);
 
         //generate unified order
         return this.generateUnifiedorder(unifiedOrderForm).getCode_url();
