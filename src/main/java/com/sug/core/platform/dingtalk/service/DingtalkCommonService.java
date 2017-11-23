@@ -3,7 +3,9 @@ package com.sug.core.platform.dingtalk.service;
 import com.sug.core.platform.dingtalk.domain.DingtalkToken;
 import com.sug.core.platform.dingtalk.domain.SendMsgText;
 import com.sug.core.platform.dingtalk.request.DingtalkCreateChatForm;
+import com.sug.core.platform.dingtalk.request.DingtalkCreateUserForm;
 import com.sug.core.platform.dingtalk.request.DingtalkSendMsgForm;
+import com.sug.core.platform.dingtalk.request.DingtalkUpdateChatForm;
 import com.sug.core.platform.dingtalk.response.DingtalkCommonResponse;
 import com.sug.core.platform.dingtalk.response.DingtalkCreateChatResponse;
 import com.sug.core.platform.dingtalk.response.DingtalkTokenResponse;
@@ -25,36 +27,44 @@ public class DingtalkCommonService {
 
     private static final String CREATE_CHAT_URL = "https://oapi.dingtalk.com/chat/create";
 
+    private static final String UPDATE_CHAT_URL = "https://oapi.dingtalk.com/chat/update";
+
     private static final String SEND_CHAT_URL = "https://oapi.dingtalk.com/chat/send";
 
-    private static final String GET_USERID_URL = "https://oapi.dingtalk.com/user/get_by_mobile";
+    private static final String CREATE_USER = "https://oapi.dingtalk.com/user/create";
 
     @Autowired
     private DingtalkTokenService tokenService;
 
-    public String getUserIdByMobile(String phone) throws Exception {
-        String uri = GET_USERID_URL + "?access_token=" + tokenService.getToken() + "&mobile=" + phone;
+    public String createUser(String name,String phone) throws Exception {
+        String uri = CREATE_USER + "?access_token=" + tokenService.getToken();
+        DingtalkCreateUserForm form = new DingtalkCreateUserForm();
+        form.setName(name);
+        form.setMobile(phone);
+        form.setDepartment(Collections.singletonList(1));
 
-        DingtalkUserIdResponse response = SimpleHttpClient.get(uri, DingtalkUserIdResponse.class);
+        DingtalkUserIdResponse response = SimpleHttpClient.post(uri, DingtalkUserIdResponse.class,form);
 
         if(response.getErrcode().equalsIgnoreCase("0")){
             return response.getUserid();
         }
 
-        throw new RuntimeException("dingtalk get user id fail, errcode :"
+        throw new RuntimeException("dingtalk create user fail, errcode :"
                 + response.getErrcode() + ", errmsg :" + response.getErrmsg());
     }
 
-    public String createConversationByPhone(String chatName,String phone) throws Exception {
+    public String createChat(String chatName,String ownerId,List<String> userIdList) throws Exception {
         String uri = CREATE_CHAT_URL + "?access_token=" + tokenService.getToken();
 
         DingtalkCreateChatForm form = new DingtalkCreateChatForm();
         form.setName(chatName);
-
-        String userId = getUserIdByMobile(phone);
-
-        form.setOwner(userId);
-        form.setUseridlist(Collections.singletonList(userId));
+        form.setOwner(ownerId);
+        if(Objects.nonNull(userIdList) && userIdList.size() > 0){
+            userIdList.add(ownerId);
+            form.setUseridlist(userIdList);
+        }else {
+            form.setUseridlist(Collections.singletonList(ownerId));
+        }
 
         DingtalkCreateChatResponse response = SimpleHttpClient.post(uri,DingtalkCreateChatResponse.class,form);
 
@@ -64,6 +74,27 @@ public class DingtalkCommonService {
 
         throw new RuntimeException("dingtalk create chat fail, errcode :"
                 + response.getErrcode() + ", errmsg :" + response.getErrmsg());
+    }
+
+    public void updateChat(String chatId,String chatName,String addUserId,String deleteUserId) throws Exception {
+        String uri = UPDATE_CHAT_URL + "?access_token=" + tokenService.getToken();
+
+        DingtalkUpdateChatForm form = new DingtalkUpdateChatForm();
+        form.setChatid(chatId);
+        form.setName(chatName);
+        if(StringUtils.hasText(addUserId)){
+            form.setAdd_useridlist(Collections.singletonList(addUserId));
+        }
+        if(StringUtils.hasText(deleteUserId)){
+            form.setDel_useridlist(Collections.singletonList(deleteUserId));
+        }
+
+        DingtalkCreateChatResponse response = SimpleHttpClient.post(uri,DingtalkCreateChatResponse.class,form);
+
+        if(!response.getErrcode().equalsIgnoreCase("0")){
+            throw new RuntimeException("dingtalk update chat fail, errcode :"
+                    + response.getErrcode() + ", errmsg :" + response.getErrmsg());
+        }
     }
 
     public void sendMsg(String chatId,String text) {
