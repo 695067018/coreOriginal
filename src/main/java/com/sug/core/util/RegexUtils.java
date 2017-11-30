@@ -13,7 +13,18 @@ public final class RegexUtils {
     public static final String REGEX_MOBILE = "(\\+\\d{2})?1[3-8]{1}\\d{9}$";
     public static final String REGEX_CHINESE = "^[\\u4E00-\\u9FA5]+$";
     public static final String BRANK_NO = "^(\\d{16}|\\d{19})$";
+    public static final String REGEX_ENGNNUM = "^[A-Z0-9]{12}$";
 
+
+    /**
+     * 验证英文与数字
+     * @param string 英文与数字20位，格式：ZXCVBASDFG1234567890
+     * @return 验证成功返回true，验证失败返回false
+     */
+    public static boolean checkEngnNum(String string) {
+
+        return Pattern.matches(REGEX_ENGNNUM, string);
+    }
 
     /**
      * 验证Email
