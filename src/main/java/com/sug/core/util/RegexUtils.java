@@ -14,6 +14,7 @@ public final class RegexUtils {
     public static final String REGEX_CHINESE = "^[\\u4E00-\\u9FA5]+$";
     public static final String BRANK_NO = "^(\\d{16}|\\d{19})$";
     public static final String REGEX_ENGNNUM = "^[A-Z0-9]{12}$";
+    public static final String REGEX_DATE_CODE = "20\\d{6}";
 
 
     /**
