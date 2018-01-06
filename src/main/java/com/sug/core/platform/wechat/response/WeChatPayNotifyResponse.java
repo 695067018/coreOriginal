@@ -1,9 +1,10 @@
 package com.sug.core.platform.wechat.response;
 
-import javax.xml.bind.annotation.XmlRootElement;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
+
 import java.io.Serializable;
 
-@XmlRootElement(name = "xml")
+@JacksonXmlRootElement(localName = "xml")
 public class WeChatPayNotifyResponse implements Serializable {
     private String return_code;
 
