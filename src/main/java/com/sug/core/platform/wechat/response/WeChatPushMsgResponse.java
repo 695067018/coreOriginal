@@ -3,7 +3,7 @@ package com.sug.core.platform.wechat.response;
 public class WeChatPushMsgResponse {
     private Integer errcode;
     private String errmsg;
-    private Integer msgid;
+    private Long msgid;
 
     public Integer getErrcode() {
         return errcode;
@@ -21,11 +21,11 @@ public class WeChatPushMsgResponse {
         this.errmsg = errmsg;
     }
 
-    public Integer getMsgid() {
+    public Long getMsgid() {
         return msgid;
     }
 
-    public void setMsgid(Integer msgid) {
+    public void setMsgid(Long msgid) {
         this.msgid = msgid;
     }
 }
