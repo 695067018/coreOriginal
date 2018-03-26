@@ -3,7 +3,7 @@ package com.sug.core.platform.wx.request;
 import java.util.List;
 
 /**
- * Created by Greg.Chen on 2015/8/27.
+ * Created by A on 2015/8/27.
  */
 public class NewsForm {
 

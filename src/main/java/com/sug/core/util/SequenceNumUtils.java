@@ -4,7 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * Created by Greg.Chen on 2015/1/28.
+ * Created by A on 2015/1/28.
  */
 public class SequenceNumUtils {
 

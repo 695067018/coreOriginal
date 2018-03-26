@@ -1,7 +1,7 @@
 package com.sug.core.platform.wx.model;
 
 /**
- * Created by Greg.Chen on 2015/6/2.
+ * Created by A on 2015/6/2.
  */
 public class WxConfig {
 

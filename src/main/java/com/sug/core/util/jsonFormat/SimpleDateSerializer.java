@@ -11,7 +11,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * Created by Greg.Chen on 14-12-1.
+ * Created by A on 14-12-1.
  */
 public class SimpleDateSerializer extends JsonSerializer<Date> {
 

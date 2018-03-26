@@ -3,7 +3,7 @@ package com.sug.core.util;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * Created by Greg.Chen on 14-11-12.
+ * Created by A on 14-11-12.
  */
 public class HttpUtils {
 

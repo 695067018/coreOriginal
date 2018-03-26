@@ -17,7 +17,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
 /**
- * Created by Greg.Chen on 2015/5/7.
+ * Created by A on 2015/5/7.
  */
 public class PageController {
     private static final Logger logger = LoggerFactory.getLogger(PageController.class);

@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- * Created by Greg.Chen on 2015/6/2.
+ * Created by A on 2015/6/2.
  */
 @Service
 public class WxAuthService {

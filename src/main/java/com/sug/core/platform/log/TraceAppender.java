@@ -5,7 +5,7 @@ import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.UnsynchronizedAppenderBase;
 
 /**
- * Created by Greg.Chen on 2015/5/22.
+ * Created by A on 2015/5/22.
  */
 public class TraceAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
 

@@ -8,7 +8,7 @@ import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 
 /**
- * Created by Greg.Chen on 2015/5/26.
+ * Created by A on 2015/5/26.
  */
 public class RSA {
     public static final String SIGNATURE_ALGORITHM = "MD5withRSA";

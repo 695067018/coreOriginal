@@ -3,7 +3,7 @@ package com.sug.core.util;
 import org.apache.commons.codec.binary.Base64;
 
 /**
- * Created by Greg.Chen on 2015/5/26.
+ * Created by A on 2015/5/26.
  */
 public class EncodingUtils {
     /**

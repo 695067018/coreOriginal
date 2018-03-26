@@ -3,7 +3,7 @@ package com.sug.core.platform.web.pagination;
 import java.util.List;
 
 /**
- * Created by Greg.Chen on 2015/1/15.
+ * Created by A on 2015/1/15.
  */
 public class PaginationView<T> {
     private List<T> list;

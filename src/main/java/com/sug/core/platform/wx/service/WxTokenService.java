@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 
 /**
- * Created by Greg.Chen on 2015/6/4.
+ * Created by A on 2015/6/4.
  */
 @Service
 public class WxTokenService {

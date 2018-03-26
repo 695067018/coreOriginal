@@ -1,7 +1,7 @@
 package com.sug.core.platform.http;
 
 /**
- * Created by Greg.Chen on 2015/8/24.
+ * Created by A on 2015/8/24.
  */
 public class HTTPHeaders {
 

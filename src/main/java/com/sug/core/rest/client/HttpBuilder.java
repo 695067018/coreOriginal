@@ -3,7 +3,7 @@ package com.sug.core.rest.client;
 import com.sug.core.util.UUIDUtils;
 
 /**
- * Created by Greg.Chen on 2015/8/20.
+ * Created by A on 2015/8/20.
  */
 public class HttpBuilder {
 

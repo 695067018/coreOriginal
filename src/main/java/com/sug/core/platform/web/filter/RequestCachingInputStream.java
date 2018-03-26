@@ -6,7 +6,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
 /**
- * Created by Greg.Chen on 2015/5/25.
+ * Created by A on 2015/5/25.
  */
 final class RequestCachingInputStream extends ServletInputStream {
     private final ByteArrayInputStream inputStream;

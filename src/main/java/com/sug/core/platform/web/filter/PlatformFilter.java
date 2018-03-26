@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.util.Enumeration;
 
 /**
- * Created by Greg.Chen on 2015/5/22.
+ * Created by A on 2015/5/22.
  */
 public class PlatformFilter implements Filter {
     private final Logger logger = LoggerFactory.getLogger(PlatformFilter.class);

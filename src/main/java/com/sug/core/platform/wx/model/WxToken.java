@@ -3,7 +3,7 @@ package com.sug.core.platform.wx.model;
 import java.util.Date;
 
 /**
- * Created by Greg.Chen on 2015/6/4.
+ * Created by A on 2015/6/4.
  */
 public class WxToken {
 

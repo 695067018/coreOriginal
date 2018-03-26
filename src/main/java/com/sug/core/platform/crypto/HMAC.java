@@ -8,7 +8,7 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
 /**
- * Created by Greg.Chen on 2015/7/27.
+ * Created by A on 2015/7/27.
  */
 public class HMAC {
     public static final String KEY_MAC = "HmacSHA1";

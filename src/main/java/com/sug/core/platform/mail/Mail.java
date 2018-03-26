@@ -1,7 +1,7 @@
 package com.sug.core.platform.mail;
 
 /**
- * Created by Greg.Chen on 14-11-9.
+ * Created by A on 14-11-9.
  */
 public class Mail {
     private String from;

@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Created by Greg.Chen on 2015/6/2.
+ * Created by A on 2015/6/2.
  */
 public class WxGetAuth {
 

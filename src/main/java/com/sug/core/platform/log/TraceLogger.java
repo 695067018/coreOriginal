@@ -8,7 +8,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 /**
- * Created by Greg.Chen on 2015/5/22.
+ * Created by A on 2015/5/22.
  */
 public class TraceLogger {
 

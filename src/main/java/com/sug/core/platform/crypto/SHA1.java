@@ -4,7 +4,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 /**
- * Created by Greg.Chen on 2015/6/3.
+ * Created by A on 2015/6/3.
  */
 public class SHA1 {
 

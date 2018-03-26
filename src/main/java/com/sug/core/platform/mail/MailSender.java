@@ -12,7 +12,7 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
 /**
- * Created by Greg.Chen on 14-11-9.
+ * Created by A on 14-11-9.
  */
 public class MailSender {
 

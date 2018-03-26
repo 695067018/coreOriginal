@@ -11,7 +11,7 @@ import java.math.RoundingMode;
 import java.text.DecimalFormat;
 
 /**
- * Created by Greg.Chen on 2014/12/30.
+ * Created by A on 2014/12/30.
  */
 public class SimpleDoubleSerializer  extends JsonSerializer<Double>{
 

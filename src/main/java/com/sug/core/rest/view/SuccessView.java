@@ -1,7 +1,7 @@
 package com.sug.core.rest.view;
 
 /**
- * Created by Greg.Chen on 2015/8/29.
+ * Created by A on 2015/8/29.
  */
 public class SuccessView {
 

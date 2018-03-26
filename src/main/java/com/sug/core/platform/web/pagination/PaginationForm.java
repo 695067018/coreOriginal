@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by Greg.Chen on 2015/1/15.
+ * Created by A on 2015/1/15.
  */
 public class PaginationForm {
     private final Logger logger = LoggerFactory.getLogger(PaginationForm.class);
