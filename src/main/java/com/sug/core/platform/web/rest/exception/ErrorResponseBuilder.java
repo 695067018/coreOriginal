@@ -33,11 +33,6 @@ public class ErrorResponseBuilder {
         ErrorResponse error = new ErrorResponse();
         error.setMessage(e.getMessage());
         error.setExceptionClass(e.getClass().getName());
-
-        ActionLog actionLog = ActionLogger.get().currentActionLog();
-        actionLog.setException(e.getClass().getName());
-        actionLog.setErrorMessage(e.getMessage());
-        actionLog.setResult(ActionResult.ERROR);
        // error.setRequestId(requestContext.getRequestId());
         if (!RuntimeEnvironment.prod.equals(runtimeSettings.getEnvironment())) {
             error.setExceptionTrace(errorMessage);

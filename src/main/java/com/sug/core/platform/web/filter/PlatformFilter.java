@@ -40,10 +40,8 @@ public class PlatformFilter implements Filter {
         }
 
         TraceLogger traceLogger = TraceLogger.getInstance();
-        ActionLogger actionLogger = ActionLogger.get();
         try{
             traceLogger.initialize();
-            actionLogger.initialize();
             MDC.put("startTime", String.valueOf(System.currentTimeMillis()));
             logger.info("=== begin request processing ===");
 
@@ -56,7 +54,6 @@ public class PlatformFilter implements Filter {
             logResponse((HttpServletResponse) servletResponse);
             logger.info("=== finish request processing ===");
             traceLogger.cleanup();
-            actionLogger.save();
         }
     }
 
@@ -64,9 +61,6 @@ public class PlatformFilter implements Filter {
         int status = response.getStatus();
         logger.info("responseHTTPStatus={}", status);
         logHeaders(response);
-        
-        ActionLog actionLog = ActionLogger.get().currentActionLog();
-        actionLog.setHTTPStatusCode(status);
     }
 
     private void logHeaders(HttpServletResponse response) {
@@ -90,12 +84,6 @@ public class PlatformFilter implements Filter {
             logger.info("body={}", requestWrapper.getBody());
         }
 
-        RemoteAddress remoteAddress = RemoteAddress.create(requestWrapper);
-        ActionLog actionLog = ActionLogger.get().currentActionLog();
-        actionLog.setHTTPMethod(requestWrapper.getMethod());
-        actionLog.setRequestURI(requestWrapper.getRequestURI());
-        actionLog.setRequestId(requestWrapper.getHeader(HTTPHeaders.HEADER_REQUEST_ID));
-        actionLog.setClientIP(remoteAddress.getClientIP());
     }
 
     private void logHeaders(RequestWrapper requestWrapper) {
