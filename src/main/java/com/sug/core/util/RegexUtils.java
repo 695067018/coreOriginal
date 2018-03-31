@@ -15,6 +15,7 @@ public final class RegexUtils {
     public static final String BRANK_NO = "^(\\d{16}|\\d{19})$";
     public static final String REGEX_ENGNNUM = "^[A-Z0-9]{12}$";
     public static final String REGEX_DATE_CODE = "20\\d{6}";
+    public static final String TWO_DIGIT_NUMBER = "^([1-9]\\d*(\\.[0-9]*[1-9])?|0\\.[0-9]*[1-9]|0)$";
 
 
     /**
