@@ -8,6 +8,7 @@ import com.sug.core.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
@@ -43,5 +44,4 @@ public class SimpleErrorResponseBuilder {
 
         return response;
     }
-
 }

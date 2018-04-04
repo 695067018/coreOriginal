@@ -1,8 +1,8 @@
 package com.sug.core.platform.web.filter;
 
+import com.sug.core.platform.http.HTTPHeaders;
 import com.sug.core.platform.log.ActionLog;
 import com.sug.core.platform.log.ActionLogger;
-import com.sug.core.platform.http.HTTPHeaders;
 import com.sug.core.platform.log.TraceLogger;
 import com.sug.core.platform.web.request.RemoteAddress;
 import org.slf4j.Logger;
@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.util.Enumeration;
 
 /**
- * Created by A on 2015/5/22.
+ * Created by Greg.Chen on 2015/5/22.
  */
 public class PlatformFilter implements Filter {
     private final Logger logger = LoggerFactory.getLogger(PlatformFilter.class);

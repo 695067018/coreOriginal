@@ -77,11 +77,9 @@ public class LoggingEventProcessor {
 
     private Writer createWriter() throws FileNotFoundException {
         String logFilePath = generateLogFilePath();
-        File logFile = new File(logFilePath);
+        String os = System.getProperty("os.name");
+        File logFile = os.toLowerCase().startsWith("win") ?  new File(System.getProperty("user.dir"),logFilePath) : new File(logFilePath);
         createParentFolder(logFile);
-
-        ActionLog actionLog = ActionLogger.get().currentActionLog();
-        actionLog.setTraceLogPath(logFilePath);
 
         return new BufferedWriter(new OutputStreamWriter(new FileOutputStream(logFile, true), CharacterEncodings.CHARSET_UTF_8));
     }

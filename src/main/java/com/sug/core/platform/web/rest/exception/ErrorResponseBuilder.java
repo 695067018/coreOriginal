@@ -28,11 +28,12 @@ public class ErrorResponseBuilder {
     public ErrorResponse createErrorResponse(Throwable e, boolean isLog) {
         String errorMessage = ExceptionUtils.stackTrace(e);
         if(isLog)
-            logger.info(errorMessage);
+            logger.error(errorMessage);
 
         ErrorResponse error = new ErrorResponse();
         error.setMessage(e.getMessage());
         error.setExceptionClass(e.getClass().getName());
+        
        // error.setRequestId(requestContext.getRequestId());
         if (!RuntimeEnvironment.prod.equals(runtimeSettings.getEnvironment())) {
             error.setExceptionTrace(errorMessage);
@@ -43,7 +44,7 @@ public class ErrorResponseBuilder {
 
     public ErrorResponse createValidationResponse(LoginRequiredException e) {
         String errorMessage = ExceptionUtils.stackTrace(e);
-        logger.info(errorMessage);
+        logger.error(errorMessage);
 
         ErrorResponse response = new ErrorResponse();
         response.setErrorCode(StringUtils.hasText(e.getCode())?e.getCode():APIErrorCode.LOGIN_REQUIRED.getCode());
@@ -54,7 +55,7 @@ public class ErrorResponseBuilder {
 
     public ErrorResponse createValidationResponse(InvalidRequestException e) {
         String errorMessage = ExceptionUtils.stackTrace(e);
-        logger.info(errorMessage);
+        logger.error(errorMessage);
 
         ErrorResponse response = new ErrorResponse();
         response.setErrorCode(StringUtils.hasText(e.getCode())?e.getCode():APIErrorCode.VALIDATION_ERROR.getCode());
@@ -65,7 +66,7 @@ public class ErrorResponseBuilder {
 
     public ErrorResponse createValidationResponse(MethodArgumentNotValidException e) {
         String errorMessage = ExceptionUtils.stackTrace(e);
-        logger.info(errorMessage);
+        logger.error(errorMessage);
 
         ErrorResponse response = new ErrorResponse();
 
