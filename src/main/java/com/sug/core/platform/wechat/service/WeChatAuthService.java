@@ -23,6 +23,8 @@ import static com.sug.core.platform.wechat.constants.WeChatUrlConstants.*;
 
 @Service
 public class WeChatAuthService {
+    private static final Logger logger = LoggerFactory.getLogger(WeChatAuthService.class);
+
     @Autowired
     private WeChatParams params;
 
@@ -60,6 +62,7 @@ public class WeChatAuthService {
         WeChatOAuthTokenResponse response = SimpleHttpClient.get(uri,WeChatOAuthTokenResponse.class);
 
         if(!Objects.isNull(response.getErrcode()) && !"0".equalsIgnoreCase(response.getErrcode())){
+            logger.error("weChat get oauth access_token fail,errCode:" + response.getErrcode() + ",errMsg:" + response.getErrmsg());
             throw new RuntimeException("weChat get oauth access_token fail,errCode:" + response.getErrcode() + ",errMsg:" + response.getErrmsg());
         }
 

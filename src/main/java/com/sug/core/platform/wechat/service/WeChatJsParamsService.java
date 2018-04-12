@@ -34,11 +34,16 @@ public class WeChatJsParamsService {
     @Autowired
     private WeChatParams params;
 
-    private WeChatJsTicket ticket = new WeChatJsTicket();
+    private static final WeChatJsTicket ticket = new WeChatJsTicket();
 
     private String getTicket() throws Exception {
 
         String uri = String.format(GET_TOKEN_URL, tokenService.getToken());
+
+        if(StringUtils.hasText(ticket.getJsTicket()) && Objects.nonNull(ticket.getGenerateTime())
+                && ticket.getGenerateTime().getTime() + EXPIRES_IN < System.currentTimeMillis()){
+            return ticket.getJsTicket();
+        }
 
         synchronized (this) {
             if (!StringUtils.hasText(ticket.getJsTicket())
