@@ -116,6 +116,11 @@ public class WeChatPayService {
         StringReader reader = new StringReader(responseText);
         WeChatUnifiedOrderResponse unifiedOrderResponse = (WeChatUnifiedOrderResponse) unmarshaller.unmarshal(reader);
 
+        String checkSign = signService.unifiedPaySign(unifiedOrderResponse.toMap());
+        if(!checkSign.equalsIgnoreCase(unifiedOrderResponse.getSign())){
+            throw new RuntimeException("get UnifiedOrder fail,invalid sign");
+        }
+
         if("FAIL".equalsIgnoreCase(unifiedOrderResponse.getReturn_code())){
             throw new RuntimeException("get UnifiedOrder fail,msg:" + unifiedOrderResponse.getReturn_msg());
         }

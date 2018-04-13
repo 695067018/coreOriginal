@@ -4,6 +4,9 @@ package com.sug.core.platform.wechat.response;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.lang.reflect.Field;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 
 @XmlRootElement(name="xml")

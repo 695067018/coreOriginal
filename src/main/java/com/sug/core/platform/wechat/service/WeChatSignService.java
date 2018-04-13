@@ -40,7 +40,7 @@ public class WeChatSignService {
         for ( Map.Entry entry: packageParams.entrySet()) {
             String k = (String) entry.getKey();
             String v = (String) entry.getValue();
-            if (null != v && !"".equals(v) && !"sign".equals(k)
+            if (StringUtils.hasText(v) && !"sign".equals(k)
                     && !"key".equals(k)) {
                 sb.append(k);
                 sb.append("=");

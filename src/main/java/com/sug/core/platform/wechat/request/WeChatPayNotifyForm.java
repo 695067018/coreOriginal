@@ -2,6 +2,9 @@ package com.sug.core.platform.wechat.request;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
+import java.lang.reflect.Field;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 @XmlRootElement(name = "xml")
 public class WeChatPayNotifyForm implements Serializable {
@@ -11,16 +14,25 @@ public class WeChatPayNotifyForm implements Serializable {
 
     private String appid;
     private String mch_id;
+    private String device_info;
     private String nonce_str;
     private String sign;
+    private String sign_type;
     private String result_code;
+    private String err_code;
+    private String err_code_des;
     private String openid;
+    private String is_subscribe;
     private String trade_type;
     private String bank_type;
-    private int total_fee;
-    private int cash_fee;
+    private Integer total_fee;
+    private Integer settlement_total_fee;
+    private String fee_type;
+    private Integer cash_fee;
+    private String cash_fee_type;
     private String transaction_id;
     private String out_trade_no;
+    private String attach;
     private String time_end;
 
     public String getReturn_code() {
@@ -55,6 +67,14 @@ public class WeChatPayNotifyForm implements Serializable {
         this.mch_id = mch_id;
     }
 
+    public String getDevice_info() {
+        return device_info;
+    }
+
+    public void setDevice_info(String device_info) {
+        this.device_info = device_info;
+    }
+
     public String getNonce_str() {
         return nonce_str;
     }
@@ -71,6 +91,14 @@ public class WeChatPayNotifyForm implements Serializable {
         this.sign = sign;
     }
 
+    public String getSign_type() {
+        return sign_type;
+    }
+
+    public void setSign_type(String sign_type) {
+        this.sign_type = sign_type;
+    }
+
     public String getResult_code() {
         return result_code;
     }
@@ -79,12 +107,36 @@ public class WeChatPayNotifyForm implements Serializable {
         this.result_code = result_code;
     }
 
+    public String getErr_code() {
+        return err_code;
+    }
+
+    public void setErr_code(String err_code) {
+        this.err_code = err_code;
+    }
+
+    public String getErr_code_des() {
+        return err_code_des;
+    }
+
+    public void setErr_code_des(String err_code_des) {
+        this.err_code_des = err_code_des;
+    }
+
     public String getOpenid() {
         return openid;
     }
 
     public void setOpenid(String openid) {
         this.openid = openid;
+    }
+
+    public String getIs_subscribe() {
+        return is_subscribe;
+    }
+
+    public void setIs_subscribe(String is_subscribe) {
+        this.is_subscribe = is_subscribe;
     }
 
     public String getTrade_type() {
@@ -103,20 +155,44 @@ public class WeChatPayNotifyForm implements Serializable {
         this.bank_type = bank_type;
     }
 
-    public int getTotal_fee() {
+    public Integer getTotal_fee() {
         return total_fee;
     }
 
-    public void setTotal_fee(int total_fee) {
+    public void setTotal_fee(Integer total_fee) {
         this.total_fee = total_fee;
     }
 
-    public int getCash_fee() {
+    public Integer getSettlement_total_fee() {
+        return settlement_total_fee;
+    }
+
+    public void setSettlement_total_fee(Integer settlement_total_fee) {
+        this.settlement_total_fee = settlement_total_fee;
+    }
+
+    public String getFee_type() {
+        return fee_type;
+    }
+
+    public void setFee_type(String fee_type) {
+        this.fee_type = fee_type;
+    }
+
+    public Integer getCash_fee() {
         return cash_fee;
     }
 
-    public void setCash_fee(int cash_fee) {
+    public void setCash_fee(Integer cash_fee) {
         this.cash_fee = cash_fee;
+    }
+
+    public String getCash_fee_type() {
+        return cash_fee_type;
+    }
+
+    public void setCash_fee_type(String cash_fee_type) {
+        this.cash_fee_type = cash_fee_type;
     }
 
     public String getTransaction_id() {
@@ -135,11 +211,41 @@ public class WeChatPayNotifyForm implements Serializable {
         this.out_trade_no = out_trade_no;
     }
 
+    public String getAttach() {
+        return attach;
+    }
+
+    public void setAttach(String attach) {
+        this.attach = attach;
+    }
+
     public String getTime_end() {
         return time_end;
     }
 
     public void setTime_end(String time_end) {
         this.time_end = time_end;
+    }
+
+    public SortedMap<String,String> toMap(){
+
+        SortedMap<String, String> sortedMap = new TreeMap<String, String>();
+
+        Field[] fields = this.getClass().getDeclaredFields();
+        for (Field field : fields) {
+            Object obj;
+            try {
+                obj = field.get(this);
+                if(obj!=null){
+                    sortedMap.put(field.getName(), String.valueOf(obj));
+                }
+            } catch (IllegalArgumentException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return sortedMap;
     }
 }

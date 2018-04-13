@@ -4,6 +4,9 @@ package com.sug.core.platform.wechat.response;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.lang.reflect.Field;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 
 @XmlRootElement(name="xml")
@@ -14,12 +17,13 @@ public class WeChatUnifiedOrderResponse {
     private String return_msg;
     private String appid;
     private String mch_id;
+    private String device_info;
     private String nonce_str;
     private String sign;
     private String result_code;
     private String err_code;
     private String err_code_des;
-    private String device_info;
+
     private String prepay_id;
     private String trade_type;
     private String code_url;
@@ -129,6 +133,26 @@ public class WeChatUnifiedOrderResponse {
         this.code_url = code_url;
     }
 
+    public SortedMap<String,String> toMap(){
 
+        SortedMap<String, String> sortedMap = new TreeMap<String, String>();
+
+        Field[] fields = this.getClass().getDeclaredFields();
+        for (Field field : fields) {
+            Object obj;
+            try {
+                obj = field.get(this);
+                if(obj!=null){
+                    sortedMap.put(field.getName(), String.valueOf(obj));
+                }
+            } catch (IllegalArgumentException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return sortedMap;
+    }
 
 }
