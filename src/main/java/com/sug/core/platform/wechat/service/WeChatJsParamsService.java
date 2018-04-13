@@ -77,7 +77,7 @@ public class WeChatJsParamsService {
         String signature = SHA1.encrypt(sb.toString());
 
         WeChatJsConfigResponse response = new WeChatJsConfigResponse();
-        response.setAppId(params.getAppId());
+        response.setAppId(params.getMpAppId());
         response.setNonceStr(nonce_str);
         response.setTimestamp(timestamp);
         response.setJsApiList(jsApiList);

@@ -38,7 +38,7 @@ public class WeChatAuthService {
      */
     public String getInfoAuthUrl(String callbackUrl,String redirectUrl) {
         try {
-            return String.format(INFO_AUTH_URL,params.getAppId(),
+            return String.format(INFO_AUTH_URL,params.getMpAppId(),
                     URLEncoder.encode(callbackUrl,"UTF-8"),
                     URLEncoder.encode(redirectUrl,"UTF-8"));
         } catch (UnsupportedEncodingException e) {
@@ -48,7 +48,7 @@ public class WeChatAuthService {
 
     public String getBaseAuthUrl(String callbackUrl,String redirectUrl) {
         try {
-            return String.format(BASE_AUTH_URL,params.getAppId(),
+            return String.format(BASE_AUTH_URL,params.getMpAppId(),
                     URLEncoder.encode(callbackUrl,"UTF-8"),
                     URLEncoder.encode(redirectUrl,"UTF-8"));
         } catch (UnsupportedEncodingException e) {
@@ -57,7 +57,7 @@ public class WeChatAuthService {
     }
 
     public WeChatOAuthEntity getOAuth(String code) throws Exception {
-        String uri = String.format(GET_OAUTH_URL,params.getAppId(),params.getAppSecret(),code);
+        String uri = String.format(GET_OAUTH_URL,params.getMpAppId(),params.getMpAppSecret(),code);
 
         WeChatOAuthTokenResponse response = SimpleHttpClient.get(uri,WeChatOAuthTokenResponse.class);
 
@@ -93,7 +93,7 @@ public class WeChatAuthService {
     }
 
     private String refreshToken(String refreshToken) throws Exception {
-        String uri = String.format(REFRESH_TOKEN_URL,params.getAppId(),refreshToken);
+        String uri = String.format(REFRESH_TOKEN_URL,params.getMpAppId(),refreshToken);
 
         WeChatOAuthTokenResponse response = SimpleHttpClient.get(uri,WeChatOAuthTokenResponse.class);
 

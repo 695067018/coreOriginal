@@ -31,7 +31,7 @@ public class WeChatTokenService {
 
     public String getToken() throws Exception {
 
-        String uri = String.format(GET_TOKEN_URL,params.getAppId(),params.getAppSecret());
+        String uri = String.format(GET_TOKEN_URL,params.getMpAppId(),params.getMpAppSecret());
 
         synchronized (this) {
             if (!StringUtils.hasText(token.getAccessToken())
