@@ -6,6 +6,7 @@ import com.sug.core.platform.wechat.constants.WeChatParams;
 import com.sug.core.platform.wechat.constants.WeChatPayConstants;
 import com.sug.core.platform.wechat.form.*;
 import com.sug.core.platform.wechat.request.WeChatPayNotifyForm;
+import com.sug.core.platform.wechat.response.WeChatAppPayResponse;
 import com.sug.core.platform.wechat.response.WeChatCheckPaymentResponse;
 import com.sug.core.platform.wechat.response.WeChatJsPayResponse;
 import com.sug.core.platform.wechat.response.WeChatUnifiedOrderResponse;
@@ -56,6 +57,7 @@ public class WeChatPayService {
         Long timestamp = System.currentTimeMillis();
 
         WeChatUnifiedOrderForm unifiedOrderForm = new WeChatUnifiedOrderForm();
+        unifiedOrderForm.setAppid(params.getMpAppId());
         BeanUtils.copyProperties(form,unifiedOrderForm);
         unifiedOrderForm.setTrade_type(WeChatPayConstants.TRADETYPE_JS);
 
@@ -85,10 +87,36 @@ public class WeChatPayService {
         return this.generateUnifiedorder(unifiedOrderForm).getCode_url();
     }
 
+    public WeChatAppPayResponse getAppPayParams(WeChatAppPayParamsForm form) throws Exception {
+        String nonce_str = RandomStringGenerator.getRandomStringByLength(15);
+        Long timestamp = System.currentTimeMillis();
+
+        WeChatUnifiedOrderForm unifiedOrderForm = new WeChatUnifiedOrderForm();
+        BeanUtils.copyProperties(form,unifiedOrderForm);
+        unifiedOrderForm.setAppid(params.getOpenAppId());
+        unifiedOrderForm.setTrade_type(WeChatPayConstants.TRADETYPE_APP);
+
+        //generate unified order
+        String prepayId = this.generateUnifiedorder(unifiedOrderForm).getPrepay_id();
+
+        WeChatAppPayResponse response = new WeChatAppPayResponse();
+        response.setAppid(params.getOpenAppId());
+        response.setPartnerid(params.getMchId());
+        response.setPrepayid(prepayId);
+        response.setPackageBody("Sign=WXPay");
+        response.setNoncestr(nonce_str);
+        response.setTimestamp(timestamp.toString());
+
+        WeChatPaySignForm signForm = new WeChatPaySignForm();
+        BeanUtils.copyProperties(response,signForm);
+        response.setSign(signService.appPaySign(signForm));
+
+        return response;
+    }
+
     private WeChatUnifiedOrderResponse generateUnifiedorder(WeChatUnifiedOrderForm form) throws Exception {
         String nonce_str = RandomStringGenerator.getRandomStringByLength(15);
         form.setNonce_str(nonce_str);
-        form.setAppid(params.getAppId());
         form.setMch_id(params.getMchId());
         form.setNotify_url(params.getNotifyUrl());
 
@@ -127,10 +155,10 @@ public class WeChatPayService {
         return unifiedOrderResponse;
     }
 
-    public WeChatCheckPaymentResponse checkPayment(WeChatPaymentCheckForm form) throws Exception {
+    public WeChatCheckPaymentResponse checkAppPayment(WeChatPaymentCheckForm form) throws Exception {
         String nonce_str = RandomStringGenerator.getRandomStringByLength(15);
         form.setNonce_str(nonce_str);
-        form.setAppid(params.getAppId());
+        form.setAppid(params.getOpenAppId());
         form.setMch_id(params.getMchId());
 
         String sign = signService.unifiedPaySign(form.toMap());

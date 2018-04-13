@@ -25,10 +25,22 @@ public class WeChatSignService {
 
     public String jsPaySign(WeChatPaySignForm form){
         SortedMap<String, String> map = new TreeMap<String, String>();
-        map.put("appId",params.getAppId());
+        map.put("appId",params.getMpAppId());
         map.put("timeStamp",form.getTimeStamp());
         map.put("nonceStr",form.getNonceStr());
         map.put("signType",WeChatPayConstants.SIGNTYPE_JSPAY);
+        map.put("package",form.getPackageBody());
+
+        return signature(map);
+    }
+
+    public String appPaySign(WeChatPaySignForm form){
+        SortedMap<String, String> map = new TreeMap<String, String>();
+        map.put("appid",params.getOpenAppId());
+        map.put("partnerid",params.getMchId());
+        map.put("prepayid",form.getPrepareid());
+        map.put("nonceStr",form.getNonceStr());
+        map.put("timestamp",form.getTimeStamp());
         map.put("package",form.getPackageBody());
 
         return signature(map);

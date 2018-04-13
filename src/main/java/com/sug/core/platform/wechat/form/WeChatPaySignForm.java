@@ -18,6 +18,9 @@ public class WeChatPaySignForm {
     private String timeStamp;
     private String packageBody;
 
+    //ap params
+    private String prepareid;
+
 
     public Integer getTotalFee() {
         return totalFee;
@@ -97,5 +100,13 @@ public class WeChatPaySignForm {
 
     public void setPackageBody(String packageBody) {
         this.packageBody = packageBody;
+    }
+
+    public String getPrepareid() {
+        return prepareid;
+    }
+
+    public void setPrepareid(String prepareid) {
+        this.prepareid = prepareid;
     }
 }

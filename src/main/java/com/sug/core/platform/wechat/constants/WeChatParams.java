@@ -7,11 +7,14 @@ import javax.validation.Valid;
 
 @Component
 public class WeChatParams {
-    @Value("${weChat.appId:@null}")
-    private String appId;
+    @Value("${weChat.mp.appId:@null}")
+    private String mpAppId;
 
-    @Value("${weChat.appSecret:@null}")
-    private String appSecret;
+    @Value("${weChat.open.appId:@null}")
+    private String openAppId;
+
+    @Value("${weChat.mp.appSecret:@null}")
+    private String mpAppSecret;
 
     @Value("${weChat.mchId:@null}")
     private String mchId;
@@ -27,12 +30,16 @@ public class WeChatParams {
 
     public static final String WECHAT_BROWSER = "MicroMessenger";
 
-    public String getAppId() {
-        return appId;
+    public String getMpAppId() {
+        return mpAppId;
     }
 
-    public String getAppSecret() {
-        return appSecret;
+    public String getOpenAppId() {
+        return openAppId;
+    }
+
+    public String getMpAppSecret() {
+        return mpAppSecret;
     }
 
     public String getMchId() {
