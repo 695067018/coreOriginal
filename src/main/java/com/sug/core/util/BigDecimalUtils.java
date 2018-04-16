@@ -18,4 +18,8 @@ public class BigDecimalUtils {
     public static BigDecimal multiply(BigDecimal value1,Integer value2){
         return value1.multiply(new BigDecimal(value2)).setScale(2,BigDecimal.ROUND_UP);
     }
+
+    public static BigDecimal divide(Integer value1,Integer value2){
+        return new BigDecimal(value1).divide(new BigDecimal(value2)).setScale(2,BigDecimal.ROUND_UP);
+    }
 }

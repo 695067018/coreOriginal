@@ -1,7 +1,5 @@
-package com.sug.core.platform.wechat.service;
+package com.sug.core.platform.wechat.twoMch;
 
-import com.sug.core.platform.exception.ResourceNotFoundException;
-import com.sug.core.platform.wechat.constants.WeChatParams;
 import com.sug.core.platform.wechat.constants.WeChatPayConstants;
 import com.sug.core.platform.wechat.form.WeChatPaySignForm;
 import com.sug.core.platform.wx.service.MD5Util;
@@ -13,14 +11,14 @@ import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-@Service
+@Service("twoMchWeChatSignService")
 public class WeChatSignService {
 
     @Autowired
     private WeChatParams params;
 
-    public String unifiedPaySign(SortedMap<String, String> map) {
-        return signature(map);
+    public String unifiedPaySign(SortedMap<String, String> map,Integer type) {
+        return signature(map,type);
     }
 
     public String jsPaySign(WeChatPaySignForm form){
@@ -31,22 +29,22 @@ public class WeChatSignService {
         map.put("signType",WeChatPayConstants.SIGNTYPE_JSPAY);
         map.put("package",form.getPackageBody());
 
-        return signature(map);
+        return signature(map,1);
     }
 
     public String appPaySign(WeChatPaySignForm form){
         SortedMap<String, String> map = new TreeMap<String, String>();
         map.put("appid",params.getOpenAppId());
-        map.put("partnerid",params.getMchId());
+        map.put("partnerid",params.getOpenMchId());
         map.put("prepayid",form.getPrepayid());
-        map.put("noncestr",form.getNonceStr());
+        map.put("nonceStr",form.getNonceStr());
         map.put("timestamp",form.getTimeStamp());
         map.put("package",form.getPackageBody());
 
-        return signature(map);
+        return signature(map,2);
     }
 
-    private String signature(SortedMap<String, String> packageParams) {
+    private String signature(SortedMap<String, String> packageParams,Integer type) {
         StringBuffer sb = new StringBuffer();
 
         for ( Map.Entry entry: packageParams.entrySet()) {
@@ -61,7 +59,7 @@ public class WeChatSignService {
             }
         }
         sb.append("key=");
-        sb.append(params.getApiSecret());
+        sb.append(type == 1 ? params.getMpApiSecret() : params.getOpenApiSecret());
 
         return MD5Util.MD5Encode(sb.toString(),"UTF-8")
                 .toUpperCase();
