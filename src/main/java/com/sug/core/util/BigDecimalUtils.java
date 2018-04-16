@@ -20,6 +20,6 @@ public class BigDecimalUtils {
     }
 
     public static BigDecimal divide(Integer value1,Integer value2){
-        return new BigDecimal(value1).divide(new BigDecimal(value2)).setScale(2,BigDecimal.ROUND_UP);
+        return new BigDecimal(value1).divide(new BigDecimal(value2),2,BigDecimal.ROUND_HALF_UP).setScale(2,BigDecimal.ROUND_UP);
     }
 }
