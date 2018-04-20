@@ -11,8 +11,16 @@ public class BigDecimalUtils {
         return value1.subtract(value2).setScale(2,BigDecimal.ROUND_UP);
     }
 
+    public static BigDecimal subtract(BigDecimal value1,BigDecimal value2,int scale){
+        return value1.subtract(value2).setScale(scale,BigDecimal.ROUND_UP);
+    }
+
     public static BigDecimal multiply(BigDecimal value1,BigDecimal value2){
         return value1.multiply(value2).setScale(2,BigDecimal.ROUND_UP);
+    }
+
+    public static BigDecimal multiply(BigDecimal value1,BigDecimal value2,int scale){
+        return value1.multiply(value2).setScale(scale,BigDecimal.ROUND_UP);
     }
 
     public static BigDecimal multiply(BigDecimal value1,Integer value2){

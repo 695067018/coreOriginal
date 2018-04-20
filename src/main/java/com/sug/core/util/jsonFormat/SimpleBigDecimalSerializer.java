@@ -14,14 +14,13 @@ import java.text.DecimalFormat;
  */
 public class SimpleBigDecimalSerializer extends JsonSerializer<BigDecimal>{
 
-    public static DecimalFormat format = new DecimalFormat("#0.00");
+    public static DecimalFormat format = new DecimalFormat("#0.0000");
 
     @Override
     public void serialize(BigDecimal value, JsonGenerator jgen, SerializerProvider serializerProvider) throws IOException {
         if(null == value){
             jgen.writeNull();
         } else{
-            value.setScale(2, RoundingMode.HALF_UP);
             String output = format.format(value.doubleValue());
             jgen.writeNumber(output);
         }
