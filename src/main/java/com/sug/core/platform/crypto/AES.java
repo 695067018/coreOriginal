@@ -1,6 +1,10 @@
 package com.sug.core.platform.crypto;
 
+import com.sug.core.platform.web.rest.exception.InvalidRequestException;
 import com.sug.core.util.EncodingUtils;
+import org.springframework.util.StringUtils;
+import sun.misc.BASE64Decoder;
+import sun.misc.BASE64Encoder;
 
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
@@ -24,13 +28,11 @@ public class AES {
      * @throws Exception
      */
     public static String initKey(String seed) throws Exception {
-        SecureRandom secureRandom = null;
-
-        if (seed != null) {
-            secureRandom = new SecureRandom(EncodingUtils.decryptBASE64(seed));
-        } else {
-            secureRandom = new SecureRandom();
+        if(!StringUtils.hasText(seed)){
+            throw new RuntimeException("seed not found");
         }
+
+        SecureRandom secureRandom = new SecureRandom(seed.getBytes());
 
         KeyGenerator kg = KeyGenerator.getInstance(ALGORITHM);
         kg.init(128,secureRandom);
@@ -80,4 +82,74 @@ public class AES {
 
         return cipher.doFinal(data);
     }
+
+    /**
+     * java aes encrypt code for matching c#
+     * @param str content to encrypt
+     * @param key aes encrypt key
+     * @return encrypted string
+     * @throws Exception
+     */
+    public static String aesEncrypt(String str, String key) throws Exception {
+        if (str == null || key == null) return null;
+        Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+        cipher.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(key.getBytes("utf-8"), "AES"));
+        byte[] bytes = cipher.doFinal(str.getBytes("utf-8"));
+        return new BASE64Encoder().encode(bytes);
+    }
+
+    /**
+     * java aes decrypt code for matching c#
+     * @param str content to decrypt
+     * @param key aes decrypt key (must be 16byte)
+     * @return decrypted string
+     * @throws Exception
+     */
+    public static String aesDecrypt(String str, String key) throws Exception {
+        if (str == null || key == null) return null;
+        Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+        cipher.init(Cipher.DECRYPT_MODE, new SecretKeySpec(key.getBytes("utf-8"), "AES"));
+        byte[] bytes = new BASE64Decoder().decodeBuffer(str);
+        bytes = cipher.doFinal(bytes);
+        return new String(bytes, "utf-8");
+    }
+
+    /**
+     *  matched c# code
+    public static string AesEncrypt(string str, string key)
+    {
+        if (string.IsNullOrEmpty(str)) return null;
+        Byte[] toEncryptArray = Encoding.UTF8.GetBytes(str);
+
+        System.Security.Cryptography.RijndaelManaged rm = new System.Security.Cryptography.RijndaelManaged
+        {
+            Key = Encoding.UTF8.GetBytes(key),
+                    Mode = System.Security.Cryptography.CipherMode.ECB,
+                    Padding = System.Security.Cryptography.PaddingMode.PKCS7
+        };
+
+        System.Security.Cryptography.ICryptoTransform cTransform = rm.CreateEncryptor();
+        Byte[] resultArray = cTransform.TransformFinalBlock(toEncryptArray, 0, toEncryptArray.Length);
+
+        return Convert.ToBase64String(resultArray, 0, resultArray.Length);
+    }
+
+    public static string AesDecrypt(string str, string key)
+    {
+        if (string.IsNullOrEmpty(str)) return null;
+        Byte[] toEncryptArray = Convert.FromBase64String(str);
+
+        System.Security.Cryptography.RijndaelManaged rm = new System.Security.Cryptography.RijndaelManaged
+        {
+            Key = Encoding.UTF8.GetBytes(key),
+                    Mode = System.Security.Cryptography.CipherMode.ECB,
+                    Padding = System.Security.Cryptography.PaddingMode.PKCS7
+        };
+
+        System.Security.Cryptography.ICryptoTransform cTransform = rm.CreateDecryptor();
+        Byte[] resultArray = cTransform.TransformFinalBlock(toEncryptArray, 0, toEncryptArray.Length);
+
+        return Encoding.UTF8.GetString(resultArray);
+    }
+    */
 }
