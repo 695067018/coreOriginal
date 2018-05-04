@@ -16,6 +16,9 @@ public class WeChatParams {
     @Value("${weChat.mp.appSecret:@null}")
     private String mpAppSecret;
 
+    @Value("${weChat.open.appSecret:@null}")
+    private String openAppSecret;
+
     @Value("${weChat.mchId:@null}")
     private String mchId;
 
@@ -29,6 +32,9 @@ public class WeChatParams {
     private String ip;
 
     public static final String WECHAT_BROWSER = "MicroMessenger";
+
+    public static final int OPEN_TYPE = 2;
+    public static final int MP_TYPE = 1;
 
     public String getMpAppId() {
         return mpAppId;
@@ -56,5 +62,9 @@ public class WeChatParams {
 
     public String getIp() {
         return ip;
+    }
+
+    public String getOpenAppSecret() {
+        return openAppSecret;
     }
 }

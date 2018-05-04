@@ -19,6 +19,7 @@ import java.net.URLEncoder;
 import java.util.Date;
 import java.util.Objects;
 
+import static com.sug.core.platform.wechat.constants.WeChatParams.MP_TYPE;
 import static com.sug.core.platform.wechat.constants.WeChatUrlConstants.*;
 
 @Service
@@ -56,8 +57,9 @@ public class WeChatAuthService {
         }
     }
 
-    public WeChatOAuthEntity getOAuth(String code) throws Exception {
-        String uri = String.format(GET_OAUTH_URL,params.getMpAppId(),params.getMpAppSecret(),code);
+    public WeChatOAuthEntity getOAuth(String code,int type) throws Exception {
+        String uri = String.format(GET_OAUTH_URL,type == MP_TYPE ? params.getMpAppId() : params.getOpenAppId(),
+                type == MP_TYPE ? params.getMpAppSecret() : params.getOpenAppSecret(),code);
 
         WeChatOAuthTokenResponse response = SimpleHttpClient.get(uri,WeChatOAuthTokenResponse.class);
 
