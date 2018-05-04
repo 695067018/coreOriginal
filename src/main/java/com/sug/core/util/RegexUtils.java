@@ -10,7 +10,8 @@ public final class RegexUtils {
 
     public static final String REGEX_IDCARD = "((1[1-5])|(2[1-3])|(3[1-7])|(4[1-6])|(5[0-4])|(6[1-5])|71|(8[12])|91)\\d{4}((((19|20)?\\d{2})(0[13-9]|1[012])(0[1-9]|[12]\\d|30))|(((19|20)?\\d{2})(0[13578]|1[02])31)|(((19|20)?\\d{2})02(0[1-9]|1\\d|2[0-8]))|((((19|20)?([13579][26]|[2468][048]|0[48]))|(2000))0229))\\d{3}(\\d|X|x)?";
     public static final String REGEX_EMAIL = "[\\w!#$%&'*+/=?^_`{|}~-]+(?:\\.[\\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\\w](?:[\\w-]*[\\w])?\\.)+[\\w](?:[\\w-]*[\\w])?";
-    public static final String REGEX_MOBILE = "(\\+\\d{2})?1[3-8]{1}\\d{9}$";
+    public static final String REGEX_MOBILE = "^(\\+\\d{2})?1[3-8]{1}\\d{9}$";
+    public static final String REGEX_PHONE = "^(0[0-9]{2,3}-)([2-9][0-9]{6,7})$|^(\\+\\d{2})?1[3-8]{1}\\d{9}$";
     public static final String REGEX_CHINESE = "^[\\u4E00-\\u9FA5]+$";
     public static final String BRANK_NO = "^(\\d{16}|\\d{19})$";
     public static final String REGEX_ENGNNUM = "^[A-Z0-9]{12}$";
