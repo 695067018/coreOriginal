@@ -1,9 +1,17 @@
-package com.sug.core.platform.push;
+package com.sug.core.platform.umeng;
 
-import org.json.JSONObject;
-
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.HashSet;
+
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONObject;
 
 public abstract class UmengNotification {
 	// This JSONObject is used for constructing the whole request string.

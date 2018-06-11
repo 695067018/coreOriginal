@@ -1,7 +1,9 @@
-package com.sug.core.platform.push.ios;
+package com.sug.core.platform.umeng.android;
 
-public class IOSUnicast extends IOSNotification {
-	public IOSUnicast(String appkey,String appMasterSecret) throws Exception{
+import com.sug.core.platform.umeng.AndroidNotification;
+
+public class AndroidUnicast extends AndroidNotification {
+	public AndroidUnicast(String appkey,String appMasterSecret) throws Exception {
 			setAppMasterSecret(appMasterSecret);
 			setPredefinedKeyValue("appkey", appkey);
 			this.setPredefinedKeyValue("type", "unicast");	
@@ -10,4 +12,5 @@ public class IOSUnicast extends IOSNotification {
 	public void setDeviceToken(String token) throws Exception {
     	setPredefinedKeyValue("device_tokens", token);
     }
+
 }

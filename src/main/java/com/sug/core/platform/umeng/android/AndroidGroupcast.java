@@ -1,9 +1,10 @@
-package com.sug.core.platform.push.android;
+package com.sug.core.platform.umeng.android;
 
+import com.sug.core.platform.umeng.AndroidNotification;
 import org.json.JSONObject;
 
 public class AndroidGroupcast extends AndroidNotification {
-	public AndroidGroupcast(String appkey, String appMasterSecret) throws Exception {
+	public AndroidGroupcast(String appkey,String appMasterSecret) throws Exception {
 			setAppMasterSecret(appMasterSecret);
 			setPredefinedKeyValue("appkey", appkey);
 			this.setPredefinedKeyValue("type", "groupcast");	

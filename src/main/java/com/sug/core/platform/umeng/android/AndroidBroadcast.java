@@ -1,4 +1,6 @@
-package com.sug.core.platform.push.android;
+package com.sug.core.platform.umeng.android;
+
+import com.sug.core.platform.umeng.AndroidNotification;
 
 public class AndroidBroadcast extends AndroidNotification {
 	public AndroidBroadcast(String appkey,String appMasterSecret) throws Exception {

@@ -1,9 +1,10 @@
-package com.sug.core.platform.push.ios;
+package com.sug.core.platform.umeng.ios;
 
+import com.sug.core.platform.umeng.IOSNotification;
 import org.json.JSONObject;
 
 public class IOSGroupcast extends IOSNotification {
-	public IOSGroupcast(String appkey, String appMasterSecret) throws Exception {
+	public IOSGroupcast(String appkey,String appMasterSecret) throws Exception {
 			setAppMasterSecret(appMasterSecret);
 			setPredefinedKeyValue("appkey", appkey);
 			this.setPredefinedKeyValue("type", "groupcast");	

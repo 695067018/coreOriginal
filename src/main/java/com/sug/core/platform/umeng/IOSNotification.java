@@ -1,10 +1,9 @@
-package com.sug.core.platform.push.ios;
-
-import com.sug.core.platform.push.UmengNotification;
-import org.json.JSONObject;
+package com.sug.core.platform.umeng;
 
 import java.util.Arrays;
 import java.util.HashSet;
+
+import org.json.JSONObject;
 
 public abstract class IOSNotification extends UmengNotification {
 

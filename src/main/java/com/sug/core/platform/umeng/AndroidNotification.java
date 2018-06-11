@@ -1,9 +1,8 @@
-package com.sug.core.platform.push.android;
+package com.sug.core.platform.umeng;
 
 import java.util.Arrays;
 import java.util.HashSet;
 
-import com.sug.core.platform.push.UmengNotification;
 import org.json.JSONObject;
 
 public abstract class AndroidNotification extends UmengNotification {
