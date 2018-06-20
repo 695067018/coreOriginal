@@ -5,8 +5,6 @@ import com.aliyuncs.IAcsClient;
 import com.aliyuncs.exceptions.ClientException;
 import com.aliyuncs.profile.DefaultProfile;
 import com.aliyuncs.profile.IClientProfile;
-import com.aliyuncs.sms.model.v20160927.SingleSendSmsRequest;
-import com.aliyuncs.sms.model.v20160927.SingleSendSmsResponse;
 import com.sug.core.platform.json.JSONBinder;
 import com.sug.core.platform.sms.aliyun.request.SendSmsRequest;
 import com.sug.core.platform.sms.aliyun.response.SendSmsResponse;
@@ -14,12 +12,9 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
-import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Created by Greg.chen on 2016-03-14.
