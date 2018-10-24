@@ -12,7 +12,6 @@ public class TraceAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
     private String logFolder;
     private PatternLayout layout;
 
-
     @Override
     public void start() {
         TraceLogger logger = TraceLogger.getInstance();
