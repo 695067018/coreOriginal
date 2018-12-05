@@ -5,6 +5,7 @@ public class WeChatPayConstants {
 
     public static final String TRADETYPE_JS = "JSAPI";
     public static final String TRADETYPE_NATIVE = "NATIVE";
+    public static final String TRADETYPE_H5 = "MWEB";
     public static final String TRADETYPE_APP = "APP";
 
     public static final String TRADE_SUCCESS = "SUCCESS";

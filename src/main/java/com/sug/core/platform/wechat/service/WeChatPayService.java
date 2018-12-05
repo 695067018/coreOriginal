@@ -88,6 +88,16 @@ public class WeChatPayService {
         return this.generateUnifiedorder(unifiedOrderForm).getCode_url();
     }
 
+    public String getMweburl(WeChatWebParamsForm form) throws Exception {
+        WeChatUnifiedOrderForm unifiedOrderForm = new WeChatUnifiedOrderForm();
+        BeanUtils.copyProperties(form,unifiedOrderForm);
+        unifiedOrderForm.setAppid(params.getMpAppId());
+        //这里设置是那种支付方式
+        unifiedOrderForm.setTrade_type(WeChatPayConstants.TRADETYPE_H5);
+        //generate unified order
+        return this.generateUnifiedorder(unifiedOrderForm).getMweb_url();
+    }
+
     public WeChatAppPayResponse getAppPayParams(WeChatAppPayParamsForm form) throws Exception {
         String nonce_str = RandomStringGenerator.getRandomStringByLength(15);
         Long timestamp = System.currentTimeMillis() / 1000;
@@ -130,18 +140,18 @@ public class WeChatPayService {
         String sign = signService.unifiedPaySign(form.toMap());
 
         form.setSign(sign);
-
+        //把参数转为xml
         JAXBContext jaxbContext = JAXBContext.newInstance(WeChatUnifiedOrderForm.class);
         Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
         StringWriter sw = new StringWriter();
         jaxbMarshaller.marshal(form, sw);
         String xml = sw.toString();
-
+        //用xml格式参数去请求微信得到微信响应的结果
         HttpClient client = new DefaultHttpClient();
         HttpPost httpPost = new HttpPost(UNIFIEDORDER_URL);
         httpPost.setEntity(new StringEntity(xml, "UTF-8"));
         HttpResponse response = client.execute(httpPost);
-
+        //拿出微信响应的结果xml转为java
         byte[] content = EntityUtils.toByteArray(response.getEntity());
         String responseText = new String(content, "UTF-8");
 
