@@ -7,6 +7,15 @@ public class WeChatOAuthEntity {
     private String access_token;
     private String refresh_token;
     private Date accessTokenTime;
+    private String unionid;
+
+    public String getUnionid() {
+        return unionid;
+    }
+
+    public void setUnionid(String unionid) {
+        this.unionid = unionid;
+    }
 
     public String getOpenid() {
         return openid;
