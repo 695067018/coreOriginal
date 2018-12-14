@@ -27,7 +27,15 @@ public class WeChatUnifiedOrderResponse {
     private String prepay_id;
     private String trade_type;
     private String code_url;
+    private String mweb_url;
 
+    public String getMweb_url() {
+        return mweb_url;
+    }
+
+    public void setMweb_url(String mweb_url) {
+        this.mweb_url = mweb_url;
+    }
 
     public String getReturn_code() {
         return return_code;

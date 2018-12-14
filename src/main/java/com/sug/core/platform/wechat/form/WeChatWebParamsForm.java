@@ -1,12 +1,20 @@
 package com.sug.core.platform.wechat.form;
 
-public class WeChatNativeParamsForm {
+public class WeChatWebParamsForm {
     private int total_fee;
     private String body;
     private String out_trade_no;
     private String product_id;
     private String spbill_create_ip;
+    private String scene_info;
 
+    public String getScene_info() {
+        return scene_info;
+    }
+
+    public void setScene_info(String scene_info) {
+        this.scene_info = scene_info;
+    }
 
     public int getTotal_fee() {
         return total_fee;
