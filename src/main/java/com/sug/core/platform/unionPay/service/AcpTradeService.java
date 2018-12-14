@@ -21,8 +21,6 @@ public class AcpTradeService {
     @Value("${acp.properties.path}")
     private String acpPropertiesPath;
 
-    private static final SimpleDateFormat time=new SimpleDateFormat("yyyyMMddHHmmss");
-
     @PostConstruct
     private void initService(){
         SDKConfig.getConfig().loadPropertiesFromPath(acpPropertiesPath);
@@ -44,7 +42,7 @@ public class AcpTradeService {
         contentData.put("merId", mchId);   		 				//商户号码，请改成自己申请的商户号或者open上注册得来的777290058159508商户号测试
         contentData.put("accessType", "0");            		 	//接入类型，商户接入填0 ，不需修改（0：直连商户， 1： 收单机构 2：平台商户）
         contentData.put("orderId", request.getOrderId());        	 	    //商户订单号，8-40位数字字母，不能含“-”或“_”，可以自行定制规则
-        contentData.put("txnTime", time.format(new Date()));		 		    //订单发送时间，取系统时间，格式为YYYYMMDDhhmmss，必须取当前时间，否则会报txnTime无效
+        contentData.put("txnTime", new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()));		 		    //订单发送时间，取系统时间，格式为YYYYMMDDhhmmss，必须取当前时间，否则会报txnTime无效
         contentData.put("accType", "01");					 	//账号类型 01：银行卡02：存折03：IC卡帐号类型(卡介质)
         contentData.put("txnAmt", String.valueOf(request.getAmount()));						//交易金额 单位为分，不能带小数点
         contentData.put("currencyCode", "156");                 //境内商户固定 156 人民币
