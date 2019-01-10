@@ -20,6 +20,17 @@ public class SimpleErrorResponseBuilder {
 
     private static final Logger logger = LoggerFactory.getLogger(SimpleErrorResponseBuilder.class);
 
+    public SimpleErrorResponse createErrorResponse(String code,Throwable e, boolean isLog) {
+        String errorMessage = ExceptionUtils.stackTrace(e);
+        if(isLog)
+            logger.error(errorMessage);
+
+        SimpleErrorResponse error = new SimpleErrorResponse();
+        error.setCode(code);
+        error.setMessage(e.getMessage());
+        return error;
+    }
+
     public SimpleErrorResponse createErrorResponse(Throwable e, boolean isLog) {
         String errorMessage = ExceptionUtils.stackTrace(e);
         if(isLog)

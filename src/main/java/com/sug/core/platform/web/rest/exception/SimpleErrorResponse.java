@@ -1,9 +1,19 @@
 package com.sug.core.platform.web.rest.exception;
 
 public class SimpleErrorResponse {
+    private String code;
+
     private String message;
 
     private String field;
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
 
     public String getMessage() {
         return message;
