@@ -51,6 +51,7 @@ public class SimpleErrorResponseBuilder {
         List<org.springframework.validation.FieldError> fieldErrors = e.getBindingResult().getFieldErrors();
         org.springframework.validation.FieldError fieldError = fieldErrors.get(0);
         response.setField(fieldError.getField());
+        response.setCode("invalidPattern");
         response.setMessage(fieldError.getDefaultMessage());
 
         return response;
