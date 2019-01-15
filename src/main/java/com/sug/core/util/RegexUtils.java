@@ -14,11 +14,14 @@ public final class RegexUtils {
     public static final String REGEX_PHONE = "^(0[0-9]{2,3}-)([2-9][0-9]{6,7})$|^(\\+\\d{2})?1[3-8]{1}\\d{9}$";
     public static final String REGEX_CHINESE = "^[\\u4E00-\\u9FA5]+$";
     public static final String BRANK_NO = "^(\\d{16}|\\d{19})$";
-    public static final String REGEX_ENGNNUM = "^[A-Z0-9]{12}$";
+    public static final String REGEX_ENGNNUM = "^[A-Za-z0-9]+$";
+    public static final String REGEX_ENG = "^[A-Za-z]+$";
     public static final String REGEX_DATE_CODE = "20\\d{6}";
     public static final String TWO_DIGIT_NUMBER = "^([1-9]\\d*(\\.[0-9]*[1-9])?|0\\.[0-9]*[1-9]|0)$";
+    public static final String REGEX_PASSWORD = "^[A-Za-z0-9]{6,12}$";
 
-
+    public static final String REGEX_ENG_MESSAGE = "must be letter";
+    public static final String REGEX_PASSWORD_MESSAGE = "must be letter or number,size between 6 and 12";
     /**
      * 验证英文与数字
      * @param string 英文与数字20位，格式：ZXCVBASDFG1234567890
