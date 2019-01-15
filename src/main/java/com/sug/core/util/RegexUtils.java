@@ -24,7 +24,8 @@ public final class RegexUtils {
     public static final String REGEX_ENG_MESSAGE = "must be letter";
     public static final String REGEX_ENGNNUM_MESSAGE = "must be letter or number";
     public static final String REGEX_PASSWORD_MESSAGE = "must be letter or number,size between 6 and 12";
-    public static final String REGEX_CHINESE_MESSAGE = "must be chinese";
+    public static final String REGEX_CHINESE_MESSAGE = "must be Chinese";
+    public static final String REGEX_CHINESE_ENG_NUM_MESSAGE = "must be Chinese or letter or number";
     /**
      * 验证英文与数字
      * @param string 英文与数字20位，格式：ZXCVBASDFG1234567890

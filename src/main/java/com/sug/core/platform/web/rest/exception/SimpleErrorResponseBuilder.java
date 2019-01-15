@@ -8,6 +8,7 @@ import com.sug.core.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -27,7 +28,7 @@ public class SimpleErrorResponseBuilder {
 
         SimpleErrorResponse error = new SimpleErrorResponse();
         error.setCode(code);
-        error.setMessage(e.getMessage());
+        error.setMessage(code.equalsIgnoreCase(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase()) ? code : e.getMessage());
         return error;
     }
 
