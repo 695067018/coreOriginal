@@ -12,7 +12,7 @@ import java.util.concurrent.ConcurrentMap;
  */
 public class TraceLogger {
 
-    private static  final TraceLogger logger = new TraceLogger();
+    private static final TraceLogger logger = new TraceLogger();
 
     private String logFolder;
     private PatternLayout layout;
@@ -21,8 +21,6 @@ public class TraceLogger {
     public static TraceLogger getInstance(){
         return logger;
     }
-
-
 
     public void process(ILoggingEvent event) throws IOException {
         long threadId = getTargetThreadId();

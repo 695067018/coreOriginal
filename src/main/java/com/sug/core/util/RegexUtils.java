@@ -21,6 +21,7 @@ public final class RegexUtils {
     public static final String REGEX_PASSWORD = "^[A-Za-z0-9]{6,12}$";
 
     public static final String REGEX_ENG_MESSAGE = "must be letter";
+    public static final String REGEX_ENGNNUM_MESSAGE = "must be letter or number";
     public static final String REGEX_PASSWORD_MESSAGE = "must be letter or number,size between 6 and 12";
     /**
      * 验证英文与数字
