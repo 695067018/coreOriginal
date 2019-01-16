@@ -12,6 +12,8 @@ public final class RegexUtils {
     public static final String REGEX_EMAIL = "[\\w!#$%&'*+/=?^_`{|}~-]+(?:\\.[\\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\\w](?:[\\w-]*[\\w])?\\.)+[\\w](?:[\\w-]*[\\w])?";
     public static final String REGEX_MOBILE = "^(\\+\\d{2})?1[3-8]{1}\\d{9}$";
     public static final String REGEX_PHONE = "^(0[0-9]{2,3}-)([2-9][0-9]{6,7})$|^(\\+\\d{2})?1[3-8]{1}\\d{9}$";
+    public static final String REGEX_PHONE_LAMDLINE = "^((13[0-9])|(14[5|7])|(15([0-3]|[5-9]))|(18[0,5-9]))\\d{8}$|^0\\d{2,3}-?\\d{7,8}$";
+
     public static final String REGEX_CHINESE = "^[\\u4E00-\\u9FA5]+$";
     public static final String BRANK_NO = "^(\\d{16}|\\d{19})$";
     public static final String REGEX_ENGNNUM = "^[A-Za-z0-9]+$";
@@ -21,7 +23,9 @@ public final class RegexUtils {
     public static final String REGEX_PASSWORD = "^[A-Za-z0-9]{6,12}$";
     public static final String REGEX_CHINESE_ENG_NUM = "^[\\u4e00-\\u9fa5_a-zA-Z0-9]+$";
 
+    public static final String REGEX_MOBILE_MESSAGE = "must be mobile phone";
     public static final String REGEX_ENG_MESSAGE = "must be letter";
+    public static final String REGEX_PHONE_LAMDLINE_MESSAGE = "Must be a mobile phone or landline";
     public static final String REGEX_ENGNNUM_MESSAGE = "must be letter or number";
     public static final String REGEX_PASSWORD_MESSAGE = "must be letter or number,size between 6 and 12";
     public static final String REGEX_CHINESE_MESSAGE = "must be Chinese";
