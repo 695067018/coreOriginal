@@ -1,5 +1,6 @@
 package com.sug.core.platform.wechat.service;
 
+import com.sug.core.platform.web.rest.exception.InvalidRequestException;
 import com.sug.core.platform.wechat.constants.WeChatParams;
 import com.sug.core.platform.wechat.entity.WeChatOAuthEntity;
 import com.sug.core.platform.wechat.response.WeChatOAuthTokenResponse;
@@ -66,6 +67,10 @@ public class WeChatAuthService {
         if(!Objects.isNull(response.getErrcode()) && !"0".equalsIgnoreCase(response.getErrcode())){
             logger.error("weChat get oauth access_token fail,errCode:" + response.getErrcode() + ",errMsg:" + response.getErrmsg());
             throw new RuntimeException("weChat get oauth access_token fail,errCode:" + response.getErrcode() + ",errMsg:" + response.getErrmsg());
+        }
+
+        if(response.getErrcode().equalsIgnoreCase("40029")){
+            throw new InvalidRequestException("invalidCode","invalid code");
         }
 
         WeChatOAuthEntity entity = new WeChatOAuthEntity();
