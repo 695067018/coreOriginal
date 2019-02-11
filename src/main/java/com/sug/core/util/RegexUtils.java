@@ -22,7 +22,9 @@ public final class RegexUtils {
     public static final String TWO_DIGIT_NUMBER = "^([1-9]\\d*(\\.[0-9]*[1-9])?|0\\.[0-9]*[1-9]|0)$";
     public static final String REGEX_PASSWORD = "^[A-Za-z0-9]{6,12}$";
     public static final String REGEX_CHINESE_ENG_NUM = "^[\\u4e00-\\u9fa5_a-zA-Z0-9]+$";
+    public static final String REGEX_NUM = "^[0-9]*$";
 
+    public static final String REGEX_NUM_MESSAGE = "must be a number";
     public static final String REGEX_MOBILE_MESSAGE = "must be mobile phone";
     public static final String REGEX_ENG_MESSAGE = "must be letter";
     public static final String REGEX_PHONE_LAMDLINE_MESSAGE = "Must be a mobile phone or landline";
