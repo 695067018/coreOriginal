@@ -6,10 +6,7 @@ import com.sug.core.platform.wechat.constants.WeChatParams;
 import com.sug.core.platform.wechat.constants.WeChatPayConstants;
 import com.sug.core.platform.wechat.form.*;
 import com.sug.core.platform.wechat.request.WeChatPayNotifyForm;
-import com.sug.core.platform.wechat.response.WeChatAppPayResponse;
-import com.sug.core.platform.wechat.response.WeChatCheckPaymentResponse;
-import com.sug.core.platform.wechat.response.WeChatJsPayResponse;
-import com.sug.core.platform.wechat.response.WeChatUnifiedOrderResponse;
+import com.sug.core.platform.wechat.response.*;
 import com.sug.core.platform.wx.model.WxPrepayRequest;
 import com.sug.core.platform.wx.model.WxPrepayResponse;
 import com.sug.core.platform.wx.service.MD5Util;
@@ -28,6 +25,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -44,10 +42,18 @@ public class WeChatPayService {
 
     private static final String UNIFIEDORDER_URL = "https://api.mch.weixin.qq.com/pay/unifiedorder";
 
+    private static final String GIFTMONEY_URL = "https://api.mch.weixin.qq.com/mmpaymkttransfers/sendredpack";
+
     private static final String CHECK_PAYMENT = "https://api.mch.weixin.qq.com/pay/orderquery";
 
     @Autowired
     private WeChatParams params;
+
+    @Value("${weChat.giftMoney.sendName:@null}")
+    private String giftMoneySendName;
+
+    @Value("${website.ip:@null}")
+    private String websiteIP;
 
     @Autowired
     private WeChatSignService signService;
@@ -207,5 +213,44 @@ public class WeChatPayService {
             throw new RuntimeException("get UnifiedOrder fail,msg:" + checkPaymentResponse.getReturn_msg());
         }
         return checkPaymentResponse;
+    }
+
+    public WeChatGiftMoneyResponse normalGiftMoney(WeChatGiftMoneyForm form) throws Exception {
+        String nonce_str = RandomStringGenerator.getRandomStringByLength(15);
+        form.setNonce_str(nonce_str);
+        form.setMch_id(params.getMchId());
+        form.setWxappid(params.getMpAppId());
+        form.setSend_name(giftMoneySendName);
+        form.setClient_ip(websiteIP);
+
+        String sign = signService.unifiedPaySign(form.toMap());
+
+        form.setSign(sign);
+        //把参数转为xml
+        JAXBContext jaxbContext = JAXBContext.newInstance(WeChatUnifiedOrderForm.class);
+        Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+        StringWriter sw = new StringWriter();
+        jaxbMarshaller.marshal(form, sw);
+        String xml = sw.toString();
+        //用xml格式参数去请求微信得到微信响应的结果
+        HttpClient client = new DefaultHttpClient();
+        HttpPost httpPost = new HttpPost(GIFTMONEY_URL);
+        httpPost.setEntity(new StringEntity(xml, "UTF-8"));
+        HttpResponse response = client.execute(httpPost);
+        //拿出微信响应的结果xml转为java
+        byte[] content = EntityUtils.toByteArray(response.getEntity());
+        String responseText = new String(content, "UTF-8");
+
+        JAXBContext resJaxbContext = JAXBContext.newInstance(WeChatGiftMoneyResponse.class);
+        Unmarshaller unmarshaller = resJaxbContext.createUnmarshaller();
+
+        StringReader reader = new StringReader(responseText);
+        WeChatGiftMoneyResponse giftMoneyResponse = (WeChatGiftMoneyResponse) unmarshaller.unmarshal(reader);
+
+        if("FAIL".equalsIgnoreCase(giftMoneyResponse.getReturn_code())){
+            throw new RuntimeException("get UnifiedOrder fail,msg:" + giftMoneyResponse.getReturn_msg());
+        }
+
+        return giftMoneyResponse;
     }
 }
