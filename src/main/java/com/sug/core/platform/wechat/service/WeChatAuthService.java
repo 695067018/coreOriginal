@@ -69,7 +69,7 @@ public class WeChatAuthService {
             throw new RuntimeException("weChat get oauth access_token fail,errCode:" + response.getErrcode() + ",errMsg:" + response.getErrmsg());
         }
 
-        if(response.getErrcode().equalsIgnoreCase("40029")){
+        if(Objects.equals(response.getErrcode(),"40029")){
             throw new InvalidRequestException("invalidCode","invalid code");
         }
 

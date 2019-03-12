@@ -26,7 +26,6 @@
     </parent>
 
     <dependencies>
-
         <!-- core -->
         <dependency>
             <groupId>org.mybatis.spring.boot</groupId>
@@ -61,8 +60,7 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-freemarker</artifactId>
         </dependency>
-
-
+        
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>

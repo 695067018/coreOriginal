@@ -14,8 +14,11 @@ import com.sug.core.util.RandomStringGenerator;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.conn.scheme.Scheme;
+import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.ssl.SSLContexts;
 import org.apache.http.util.EntityUtils;
 import org.apache.ibatis.jdbc.RuntimeSqlException;
 import org.jdom2.Document;
@@ -29,10 +32,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import javax.net.ssl.SSLContext;
 import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import java.io.*;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
 import java.util.*;
 
 @Service
@@ -55,8 +62,14 @@ public class WeChatPayService {
     @Value("${website.ip:@null}")
     private String websiteIP;
 
+    @Value("${weChat.ca.path}")
+    private String caPath;
+
     @Autowired
     private WeChatSignService signService;
+
+    @Autowired
+    private static HttpClient httpClientWithCa;
 
     public WeChatJsPayResponse getJsPayParams(WeChatJsPayParamsForm form) throws Exception {
         String nonce_str = RandomStringGenerator.getRandomStringByLength(15);
@@ -227,13 +240,33 @@ public class WeChatPayService {
 
         form.setSign(sign);
         //把参数转为xml
-        JAXBContext jaxbContext = JAXBContext.newInstance(WeChatUnifiedOrderForm.class);
+        JAXBContext jaxbContext = JAXBContext.newInstance(WeChatGiftMoneyForm.class);
         Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
         StringWriter sw = new StringWriter();
         jaxbMarshaller.marshal(form, sw);
         String xml = sw.toString();
         //用xml格式参数去请求微信得到微信响应的结果
         HttpClient client = new DefaultHttpClient();
+
+        KeyStore keyStore = KeyStore.getInstance("PKCS12");
+
+        FileInputStream inputStream = new FileInputStream(new File(caPath));
+        try {
+            // 指定PKCS12的密码(商户ID)
+            keyStore.load(inputStream, params.getMchId().toCharArray());
+        } finally {
+            inputStream.close();
+        }
+
+        SSLContext sslcontext = SSLContexts
+                .custom()
+                .loadKeyMaterial(keyStore, params.getMchId().toCharArray())
+                .build();
+        SSLSocketFactory socketFactory = new SSLSocketFactory(sslcontext);
+        Scheme sch = new Scheme("https", 8443, socketFactory);
+        client.getConnectionManager().getSchemeRegistry().register(sch);
+
+
         HttpPost httpPost = new HttpPost(GIFTMONEY_URL);
         httpPost.setEntity(new StringEntity(xml, "UTF-8"));
         HttpResponse response = client.execute(httpPost);
@@ -248,9 +281,39 @@ public class WeChatPayService {
         WeChatGiftMoneyResponse giftMoneyResponse = (WeChatGiftMoneyResponse) unmarshaller.unmarshal(reader);
 
         if("FAIL".equalsIgnoreCase(giftMoneyResponse.getReturn_code())){
-            throw new RuntimeException("get UnifiedOrder fail,msg:" + giftMoneyResponse.getReturn_msg());
+            throw new RuntimeException("send giftMoney fail,msg:" + giftMoneyResponse.getReturn_msg());
+        }else if("FAIL".equalsIgnoreCase(giftMoneyResponse.getResult_code())){
+            throw new RuntimeException("send giftMoney fail,msg:" + giftMoneyResponse.getErr_code_des());
         }
 
         return giftMoneyResponse;
+    }
+
+    private HttpClient getHttpClientWithCa() throws Exception {
+        if(Objects.nonNull(httpClientWithCa)){
+            return httpClientWithCa;
+        }else {
+            synchronized (this){
+                httpClientWithCa = new DefaultHttpClient();
+
+                KeyStore keyStore = KeyStore.getInstance("PKCS12");
+
+                FileInputStream inputStream = new FileInputStream(new File(caPath));
+                try {
+                    keyStore.load(inputStream, params.getMchId().toCharArray());
+                } finally {
+                    inputStream.close();
+                }
+
+                SSLContext sslcontext = SSLContexts
+                        .custom()
+                        .loadKeyMaterial(keyStore, params.getMchId().toCharArray())
+                        .build();
+                SSLSocketFactory socketFactory = new SSLSocketFactory(sslcontext);
+                Scheme sch = new Scheme("https", 8443, socketFactory);
+                httpClientWithCa.getConnectionManager().getSchemeRegistry().register(sch);
+                return httpClientWithCa;
+            }
+        }
     }
 }
