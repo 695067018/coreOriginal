@@ -31,13 +31,13 @@ public class WeChatTokenService {
 
     public String getToken() throws Exception {
 
-        String uri = String.format(GET_TOKEN_URL,params.getMpAppId(),params.getMpAppSecret());
+        String uri = String.format(GET_TOKEN_URL, params.getMpAppId(), params.getMpAppSecret());
 
-        synchronized (this) {
-            if (!StringUtils.hasText(token.getAccessToken())
-                    || token.getGenerateTime().getTime() + EXPIRES_IN < System.currentTimeMillis()) {
+        if (!StringUtils.hasText(token.getAccessToken())
+                || token.getGenerateTime().getTime() + EXPIRES_IN < System.currentTimeMillis()) {
+            synchronized (this) {
                 WeChatTokenResponse response = SimpleHttpClient.get(uri, WeChatTokenResponse.class);
-                if(!Objects.isNull(response.getErrcode())){
+                if (!Objects.isNull(response.getErrcode())) {
                     logger.error("weChat access_token fail,errCode:" + response.getErrcode() + ",errMsg:" + response.getErrmsg());
                 }
                 token.setAccessToken(response.getAccess_token());

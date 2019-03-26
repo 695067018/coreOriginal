@@ -40,16 +40,17 @@ public class WeChatJsParamsService {
 
         String uri = String.format(GET_TOKEN_URL, tokenService.getToken());
 
-        if(StringUtils.hasText(ticket.getJsTicket()) && Objects.nonNull(ticket.getGenerateTime())
-                && ticket.getGenerateTime().getTime() + EXPIRES_IN < System.currentTimeMillis()){
+        if (StringUtils.hasText(ticket.getJsTicket()) && Objects.nonNull(ticket.getGenerateTime())
+                && ticket.getGenerateTime().getTime() + EXPIRES_IN < System.currentTimeMillis()) {
             return ticket.getJsTicket();
         }
 
-        synchronized (this) {
-            if (!StringUtils.hasText(ticket.getJsTicket())
-                    || ticket.getGenerateTime().getTime() + EXPIRES_IN < System.currentTimeMillis()) {
+
+        if (!StringUtils.hasText(ticket.getJsTicket())
+                || ticket.getGenerateTime().getTime() + EXPIRES_IN < System.currentTimeMillis()) {
+            synchronized (this) {
                 WeChatJsTicketResponse response = SimpleHttpClient.get(uri, WeChatJsTicketResponse.class);
-                if (Objects.nonNull(response.getErrcode()) &&  !"0".equals(response.getErrcode())) {
+                if (Objects.nonNull(response.getErrcode()) && !"0".equals(response.getErrcode())) {
                     logger.error("weChat jsTicket fail,errCode:" + response.getErrcode() + ",errMsg:" + response.getErrmsg());
                 }
                 ticket.setJsTicket(response.getTicket());
@@ -59,7 +60,7 @@ public class WeChatJsParamsService {
         return ticket.getJsTicket();
     }
 
-    public WeChatJsConfigResponse getJsConfigParams(String url,List<String> jsApiList) throws Exception {
+    public WeChatJsConfigResponse getJsConfigParams(String url, List<String> jsApiList) throws Exception {
         String nonce_str = RandomStringGenerator.getRandomStringByLength(15);
 
         Long timestamp = System.currentTimeMillis();

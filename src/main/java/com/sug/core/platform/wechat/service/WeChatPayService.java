@@ -62,7 +62,7 @@ public class WeChatPayService {
     @Value("${website.ip:@null}")
     private String websiteIP;
 
-    @Value("${weChat.ca.path}")
+    @Value("${weChat.ca.path:@null}")
     private String caPath;
 
     @Autowired
