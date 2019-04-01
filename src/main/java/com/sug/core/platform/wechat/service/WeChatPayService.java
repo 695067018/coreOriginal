@@ -32,6 +32,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import javax.annotation.PostConstruct;
 import javax.net.ssl.SSLContext;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -62,8 +63,34 @@ public class WeChatPayService {
     @Value("${website.ip:@null}")
     private String websiteIP;
 
-    @Value("${weChat.ca.path:@null}")
+    @Value("${weChat.ca.path}")
     private String caPath;
+
+    private static HttpClient giftClient = new DefaultHttpClient();
+
+    @PostConstruct
+    public void initGiftClient() throws Exception {
+        if(!StringUtils.hasText(caPath)){
+            return;
+        }
+
+        KeyStore keyStore = KeyStore.getInstance("PKCS12");
+
+        FileInputStream inputStream = new FileInputStream(new File(caPath));
+        try {
+            keyStore.load(inputStream, params.getMchId().toCharArray());
+        } finally {
+            inputStream.close();
+        }
+
+        SSLContext sslcontext = SSLContexts
+                .custom()
+                .loadKeyMaterial(keyStore, params.getMchId().toCharArray())
+                .build();
+        SSLSocketFactory socketFactory = new SSLSocketFactory(sslcontext);
+        Scheme sch = new Scheme("https", 8443, socketFactory);
+        giftClient.getConnectionManager().getSchemeRegistry().register(sch);
+    }
 
     @Autowired
     private WeChatSignService signService;
@@ -246,30 +273,10 @@ public class WeChatPayService {
         jaxbMarshaller.marshal(form, sw);
         String xml = sw.toString();
         //用xml格式参数去请求微信得到微信响应的结果
-        HttpClient client = new DefaultHttpClient();
-
-        KeyStore keyStore = KeyStore.getInstance("PKCS12");
-
-        FileInputStream inputStream = new FileInputStream(new File(caPath));
-        try {
-            // 指定PKCS12的密码(商户ID)
-            keyStore.load(inputStream, params.getMchId().toCharArray());
-        } finally {
-            inputStream.close();
-        }
-
-        SSLContext sslcontext = SSLContexts
-                .custom()
-                .loadKeyMaterial(keyStore, params.getMchId().toCharArray())
-                .build();
-        SSLSocketFactory socketFactory = new SSLSocketFactory(sslcontext);
-        Scheme sch = new Scheme("https", 8443, socketFactory);
-        client.getConnectionManager().getSchemeRegistry().register(sch);
-
 
         HttpPost httpPost = new HttpPost(GIFTMONEY_URL);
         httpPost.setEntity(new StringEntity(xml, "UTF-8"));
-        HttpResponse response = client.execute(httpPost);
+        HttpResponse response = giftClient.execute(httpPost);
         //拿出微信响应的结果xml转为java
         byte[] content = EntityUtils.toByteArray(response.getEntity());
         String responseText = new String(content, "UTF-8");

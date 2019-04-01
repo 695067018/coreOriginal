@@ -45,7 +45,6 @@ public class WeChatJsParamsService {
             return ticket.getJsTicket();
         }
 
-
         if (!StringUtils.hasText(ticket.getJsTicket())
                 || ticket.getGenerateTime().getTime() + EXPIRES_IN < System.currentTimeMillis()) {
             synchronized (this) {
